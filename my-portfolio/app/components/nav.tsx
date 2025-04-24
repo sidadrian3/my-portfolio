@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ThemeSwitch } from "./theme-switch";
+// import { ThemeSwitch } from "./theme-switch";
 import { metaData } from "../config";
 
 const navItems = {
@@ -27,7 +27,7 @@ export function Navbar() {
               {name}
             </Link>
           ))}
-          <ThemeSwitch />
+          {/* <ThemeSwitch /> */}
         </div>
       </div>
     </nav>

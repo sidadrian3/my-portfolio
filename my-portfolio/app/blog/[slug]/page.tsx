@@ -12,6 +12,10 @@ export async function generateStaticParams() {
   }));
 }
 
+
+
+
+
 export async function generateMetadata({
   params,
 }): Promise<Metadata | undefined> {

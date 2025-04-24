@@ -10,7 +10,7 @@ const navItems = {
 
 export function Navbar() {
   return (
-    <nav className="animate-fall-in lg:mb-16 mb-12 py-5">
+    <nav className=" lg:mb-16 mb-12 py-5">
       <div className="flex flex-col md:flex-row md:items-center justify-between">
         <div className="flex items-center">
           <Link href="/" className="transition-transform transform hover:scale-105 text-3xl font-semibold">

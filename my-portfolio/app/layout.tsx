@@ -8,6 +8,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import Footer from "./components/footer";
 // import { ThemeProvider } from "./components/theme-switch";
 import { metaData } from "./config";
+import ClientLayout from "./components/ClientLayout";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -78,20 +80,8 @@ export default function RootLayout({
         />
       </head>
       <body className=" bg-cyan-500 antialiased flex flex-col items-center justify-center mx-auto mt-2 lg:mt-8 mb-20 lg:mb-40">
-        {/* <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        > */}
-          <main className=" animate-fall-in rounded-lg bg-cyan-100 flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[624px] w-full p-9">
-            <Navbar />
-            {children}
-            <Footer />
-            <Analytics />
-            <SpeedInsights />
-          </main>
-        {/* </ThemeProvider> */}
+      <ClientLayout>{children}</ClientLayout>
+
       </body>
     </html>
   );

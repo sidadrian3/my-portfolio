@@ -6,7 +6,7 @@ export default function Page() {
   // const [src, setSrc] = useState("/myprofile.jpg"); // Default to the main image
 
   return (
-    <section className = "animate-fall-in bg-cyan-100 rounded-md p-4">
+    <section className = " bg-cyan-100 rounded-md p-4">
       <a href={socialLinks.twitter} target="_blank">
         <Image
           src="/myprofile.jpg"

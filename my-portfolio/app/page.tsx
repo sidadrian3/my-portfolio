@@ -6,7 +6,7 @@ export default function Page() {
   // const [src, setSrc] = useState("/myprofile.jpg"); // Default to the main image
 
   return (
-    <section>
+    <section className = "animate-fall-in bg-cyan-100 rounded-md p-4">
       <a href={socialLinks.twitter} target="_blank">
         <Image
           src="/myprofile.jpg"
@@ -18,25 +18,17 @@ export default function Page() {
           priority
         />
       </a>
-      <h1 className="mb-8 text-2xl font-medium">
+      <h1 className="mb-8 text-2xl font-bold text-center sm:text-left">
         Hello there, I'm Sid Adrian B. Digamon
       </h1>
-      <div className="prose prose-neutral dark:prose-invert">
+      <div className="prose prose-neutral ">
         <p>
         I'm a Computer Science student based in Davao City, currently studying at Ateneo de Davao University.
         </p>
         <p>
          I'm passionate about web development and actively polishing my skills in both front-end and back-end technologies.
         </p>
-        <p>
-          
-        </p>
-        <p>
-         
-        </p>
-        <p>
-        
-        </p>
+       
       </div>
     </section>
   );

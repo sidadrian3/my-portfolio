@@ -7,7 +7,20 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { motion } from 'framer-motion';
 import { usePathname } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { Jockey_One, Roboto_Flex } from "next/font/google";
+
+// Import the fonts
+const jockeyOne = Jockey_One({
+  subsets: ["latin"],
+  weight: "400", // Jockey One only has one weight
+  variable: "--font-jockey-one",
+});
+
+const robotoFlex = Roboto_Flex({
+  subsets: ["latin"],
+  weight: ["100", "400", "700"], // Specify weights you want to use
+  variable: "--font-roboto-flex",
+});
 
 export default function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

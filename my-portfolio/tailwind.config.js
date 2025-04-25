@@ -13,6 +13,10 @@ module.exports = {
           '100%': { transform: 'translateY(0)', opacity: '1' },
         },
       },
+      fontFamily:{
+        robotoFlex: ["var(--font-roboto-flex)"],
+        jockeyOne: ["var(--font-jockey-one)"],
+      },
       typography: {
         quoteless: {
           css: {

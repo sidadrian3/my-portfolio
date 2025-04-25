@@ -1,6 +1,20 @@
 import Link from "next/link";
 // import { ThemeSwitch } from "./theme-switch";
 import { metaData } from "../config";
+import { Jockey_One, Roboto_Flex } from "next/font/google";
+
+// Import the fonts
+const jockeyOne = Jockey_One({
+  subsets: ["latin"],
+  weight: "400", // Jockey One only has one weight
+  variable: "--font-jockey-one",
+});
+
+const robotoFlex = Roboto_Flex({
+  subsets: ["latin"],
+  weight: ["100", "400", "700"], // Specify weights you want to use
+  variable: "--font-roboto-flex",
+});
 
 const navItems = {
   // "/blog": { name: "Blog" },
@@ -13,7 +27,8 @@ export function Navbar() {
     <nav className=" lg:mb-16 mb-12 py-5">
       <div className="flex flex-col md:flex-row md:items-center justify-between">
         <div className="flex items-center">
-          <Link href="/" className="transition-transform transform hover:scale-105 text-3xl font-semibold">
+          <Link href="/" className={`${jockeyOne.variable} ${robotoFlex.variable} transition-transform transform hover:scale-105 text-5xl font-semibold font-jockeyOne`}>
+
             {metaData.title}
           </Link>
         </div>

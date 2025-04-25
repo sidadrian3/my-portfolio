@@ -40,8 +40,8 @@ function SocialLinks() {
 
 export default function Footer() {
   return (
-    <footer className="  flex flex-col lg:flex-row justify-between items-center lg:mt-24 mt-16 text-[#1C1C1C] dark:text-[#D4D4D4]">
-      <p className="  mb-4 lg:mb-0 text-sm">sidadrian3@gmail.com</p>
+    <footer className="  flex flex-col lg:flex-row justify-between items-center lg:mt-12 mt-12 text-[#1C1C1C] dark:text-[#D4D4D4]">
+      <p className="  mb-4 lg:mb-0 text-sm">sidadrian3@gmail.com / sabdigamon@addu.edu.ph</p>
       <SocialLinks />
       <style jsx>{`
         @media screen and (max-width: 480px) {

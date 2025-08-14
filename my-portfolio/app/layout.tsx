@@ -1,4 +1,3 @@
-
 import "./global.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -69,7 +68,6 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  
   return (
     <html lang="en" className={`${inter.className}`}>
       <head>
@@ -92,10 +90,10 @@ export default function RootLayout({
           title="JSON Feed"
         />
       </head>
-      
+
       <body
-        className={`${jockeyOne.variable} ${robotoFlex.variable} bg-cyan-500 antialiased flex flex-col items-center justify-center mx-auto mt-2 lg:mt-8 mb-20 lg:mb-40 font-robotoFlex`}
-      > 
+        className={`${jockeyOne.variable} ${robotoFlex.variable} bg-black min-h-screen antialiased flex flex-col items-center justify-center mx-auto font-robotoFlex`}
+      >
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

@@ -17,7 +17,6 @@ const robotoFlex = Roboto_Flex({
 });
 
 const navItems = {
-  // "/blog": { name: "Blog" },
   "/projects": { name: "Projects" },
   "/photos": { name: "Photos" },
 };
@@ -27,8 +26,10 @@ export function Navbar() {
     <nav className=" lg:mb-16 mb-12 py-5">
       <div className="flex flex-col md:flex-row md:items-center justify-between">
         <div className="flex items-center">
-          <Link href="/" className={`${jockeyOne.variable} ${robotoFlex.variable} transition-transform transform hover:scale-105 text-5xl font-semibold font-jockeyOne`}>
-
+          <Link
+            href="/"
+            className={`${robotoFlex.variable} transition-transform transform hover:scale-105 text-5xl font-semibold font-robotoFlex `}
+          >
             {metaData.title}
           </Link>
         </div>
@@ -37,8 +38,8 @@ export function Navbar() {
             <Link
               key={path}
               href={path}
-              className="transition-transform transform hover:scale-105 hover:text-neutral-800 dark:hover:text-neutral-200 flex align-middle relative"
-              >
+              className="transition-transform transform hover:scale-105 text-white flex align-middle relative"
+            >
               {name}
             </Link>
           ))}

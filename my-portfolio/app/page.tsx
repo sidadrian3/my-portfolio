@@ -1,14 +1,14 @@
+"use client";
 import Image from "next/image";
 import { socialLinks } from "./config";
 import { useState } from "react";
-
-
+import { TypeAnimation } from "react-type-animation";
 
 export default function Page() {
   // const [src, setSrc] = useState("/myprofile.jpg"); // Default to the main image
 
   return (
-    <section className = " bg-cyan-100 rounded-md p-4">
+    <section className=" bg-black rounded-md p-4">
       <a href={socialLinks.twitter} target="_blank">
         <Image
           src="/myprofile.jpg"
@@ -21,28 +21,41 @@ export default function Page() {
         />
       </a>
       <h1 className="mb-8 text-2xl font-bold text-center sm:text-left">
-        Hello there, I'm Sid Adrian B. Digamon
+        <TypeAnimation
+          sequence={[
+            "Hello there,",
+            1000,
+            "Hello there, I'm Sid Adrian B. Digamon",
+            1000,
+          ]}
+          wrapper="span"
+          speed={50}
+          repeat={0}
+          className="text-white"
+        />
       </h1>
-      <div className="prose prose-neutral ">
+      <div className="prose prose-neutral prose-invert !text-white">
         <p>
-        I'm a Computer Science student based in Davao City, currently studying at Ateneo de Davao University.
+          I'm a Computer Science student based in Davao City, currently studying
+          at Ateneo de Davao University.
         </p>
         <p>
-        I’m passionate about leveraging technology to solve real-world problems. 
-        Through both major and minor academic projects,
-         I’ve deepened my understanding of core concepts and development practices. 
+          I’m passionate about leveraging technology to solve real-world
+          problems. Through both major and minor academic projects, I’ve
+          deepened my understanding of core concepts and development practices.
         </p>
         <p>
-        I quickly adapt to new tools and environments, 
-        and I’m dedicated to continuous learning, innovation, and excellence—qualities 
-        that make me a strong candidate for internship opportunities.
+          I quickly adapt to new tools and environments, and I’m dedicated to
+          continuous learning, innovation, and excellence—qualities that make me
+          a strong candidate for internship opportunities.
         </p>
-       
       </div>
       <div className="gap-10 mt-10 mb-10">
-      <h3 className="text-2xl text-center font-bold tracking-tight mb-4">Tech Stack</h3>
-        <div className = "grid grid-cols-2 gap-4">
-          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3 rounded-lg bg-[#aadbe2] h-24">
+        <h3 className="text-2xl text-center font-bold tracking-tight mb-4">
+          Tech Stack
+        </h3>
+        <div className="grid grid-cols-2 gap-4  bg-black p-4 rounded-lg">
+          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3  h-24">
             <img
               alt="Java"
               loading="lazy"
@@ -54,7 +67,7 @@ export default function Page() {
             />
             <span className="text-xs text-center font-bold">Java</span>
           </div>
-          <div className=" transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3 rounded-lg bg-[#aadbe2] h-24">
+          <div className=" transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3  h-24">
             <img
               alt="JavaScript"
               loading="lazy"
@@ -66,7 +79,7 @@ export default function Page() {
             />
             <span className="text-xs text-center font-bold">JavaScript</span>
           </div>
-          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3 rounded-lg bg-[#aadbe2] h-24">
+          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3  h-24">
             <img
               alt="React"
               loading="lazy"
@@ -78,7 +91,7 @@ export default function Page() {
             />
             <span className="text-xs text-center font-bold">React</span>
           </div>
-          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3 rounded-lg bg-[#aadbe2] h-24">
+          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3  h-24">
             <img
               alt="Tailwind"
               loading="lazy"
@@ -90,7 +103,7 @@ export default function Page() {
             />
             <span className="text-xs text-center font-bold">Tailwind</span>
           </div>
-          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3 rounded-lg bg-[#aadbe2] h-24">
+          <div className="transition-transform transform hover:scale-105 flex flex-col items-center justify-center p-3  h-24">
             <img
               alt="Supabase"
               loading="lazy"

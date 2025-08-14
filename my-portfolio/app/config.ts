@@ -1,10 +1,9 @@
 export const metaData = {
   baseUrl: "https://www.facebook.com/adrian.digamon",
-  title: "Sid's Portfolio",
+  title: "' SID '",
   name: "Sid",
   ogImage: "/opengraph-image.png",
-  description:
-    "A simple portfolio for mine.",
+  description: "A simple portfolio for mine.",
 };
 
 export const socialLinks = {

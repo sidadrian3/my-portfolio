@@ -22,7 +22,7 @@ export default function Page() {
             priority
           />
         </a>
-        <h1 className="mb-8 text-2xl font-bold text-center sm:text-left">
+        <h1 className="mb-8 text-3xl font-medium text-center sm:text-left">
           <TypeAnimation
             sequence={[
               "Hello there,",

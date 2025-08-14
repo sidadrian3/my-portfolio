@@ -31,16 +31,36 @@ export default function ClientLayout({
 
   return (
     <motion.div
-      key={pathname} // Ensure route change triggers animation
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: 20 }}
-      transition={{ duration: 1.5, ease: "easeInOut" }}
-      className=" rounded-lg bg-black text-white flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[650px] w-full p-9"
+      key={pathname}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 1 }} // Increased from 1 to 2
+      className="rounded-lg bg-black text-white flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[650px] w-full p-9"
     >
-      <Navbar />
-      <main className="flex-grow">{children}</main>
-      <Footer />
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0 }} // Increased from 0.5 to 1
+      >
+        <Navbar />
+      </motion.div>
+
+      <motion.main
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 0.8 }} // Increased delay from 0.3 to 1.5
+        className="flex-grow"
+      >
+        {children}
+      </motion.main>
+
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 1.2 }} // Increased delay from 0.6 to 2.5
+      >
+        <Footer />
+      </motion.div>
     </motion.div>
   );
 }

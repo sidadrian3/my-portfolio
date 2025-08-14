@@ -19,6 +19,7 @@ const robotoFlex = Roboto_Flex({
 const navItems = {
   "/projects": { name: "Projects" },
   "/photos": { name: "Photos" },
+  "/contact": { name: "Contact" },
 };
 
 export function Navbar() {

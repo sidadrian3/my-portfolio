@@ -1,11 +1,11 @@
 export default function TechStack() {
   return (
-    <div className="gap-10 mt-10">
-      <h3 className="text-3xl text-center font-bold tracking-tight mt-10 mb-10">
+    <div className="gap-6 mt-8">
+      <h3 className="text-2xl text-center font-bold tracking-tight mb-6">
         Tech Stack
       </h3>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 bg-black p-6 rounded-lg">
-        <div className="transition-transform transform hover:scale-150 flex flex-col items-center justify-center p-10 h-36">
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6 bg-black p-2 rounded-lg">
+        <div className="transition-transform transform hover:scale-150 flex flex-col items-center justify-center p-10 h-26">
           <img
             alt="Java"
             loading="lazy"

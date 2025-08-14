@@ -28,14 +28,6 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  //   const [isMounted, setIsMounted] = useState(false);
-
-  //   // Ensure this only runs once after the component is mounted
-  //   useEffect(() => {
-  //     setIsMounted(true);
-  //   }, []);
-
-  //   if (!isMounted) return null; // Prevent rendering anything until mounted
 
   return (
     <motion.div
@@ -44,10 +36,10 @@ export default function ClientLayout({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 20 }}
       transition={{ duration: 1.5, ease: "easeInOut" }}
-      className=" rounded-lg bg-black text-white flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[624px] w-full p-9"
+      className=" rounded-lg bg-black text-white flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[650px] w-full p-9"
     >
       <Navbar />
-      {children}
+      <main className="flex-grow">{children}</main>
       <Footer />
     </motion.div>
   );

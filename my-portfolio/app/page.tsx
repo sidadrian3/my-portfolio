@@ -4,6 +4,7 @@ import { socialLinks } from "./config";
 import { useState } from "react";
 import { TypeAnimation } from "react-type-animation";
 import TechStack from "./components/techStack";
+import { Timeline } from "./components/Timeline";
 
 export default function Page() {
   // const [src, setSrc] = useState("/myprofile.jpg"); // Default to the main image
@@ -38,22 +39,14 @@ export default function Page() {
         </h1>
         <div className="prose prose-neutral prose-invert !text-white">
           <p>
-            I'm a Computer Science student based in Davao City, currently
-            studying at Ateneo de Davao University.
-          </p>
-          <p>
-            I’m passionate about leveraging technology to solve real-world
-            problems. Through both major and minor academic projects, I’ve
-            deepened my understanding of core concepts and development
-            practices.
-          </p>
-          <p>
-            I quickly adapt to new tools and environments, and I’m dedicated to
-            continuous learning, innovation, and excellence—qualities that make
-            me a strong candidate for internship opportunities.
+            I'm a graduate of Ateneo de Davao University with a degree in Computer
+            Science. Living life, finding purpose. May opportunities come, or
+            I'll find it, whichever come first.
           </p>
         </div>
-        <TechStack />
+        <div className="mt-12">
+          <Timeline />
+        </div>
       </div>
     </section>
   );

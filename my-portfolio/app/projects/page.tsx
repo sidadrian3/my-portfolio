@@ -1,101 +1,104 @@
 "use client";
 
+import React, { useState } from "react";
 import Link from "next/link";
 import { projects } from "./project-data";
 import { motion } from "framer-motion";
-import { FiExternalLink } from "react-icons/fi";
-
-const container = {
-  hidden: {},
-  show: {
-    transition: {
-      staggerChildren: 0.12,
-    },
-  },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 16 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.45, ease: "easeOut" as const } },
-};
+import { FiArrowUpRight } from "react-icons/fi";
 
 export default function Projects() {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-medium">Projects</h1>
+      <h2 className="font-mono text-sm uppercase text-neutral-400 tracking-widest mb-8">
+        [01] Projects
+      </h2>
 
-      <motion.div
-        className="flex flex-col gap-4"
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-        {projects.map((project, index) => (
-          <motion.div key={index} variants={item}>
-            {/* If project has multiple links, render as a non-clickable card with link buttons */}
-            {project.links && project.links.length > 0 ? (
-              <div className="rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 transition-all duration-300 hover:border-neutral-600 hover:bg-neutral-800/60">
-                {/* Top row: title + year */}
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <h2 className="text-[15px] font-medium text-white">
+      <div className="flex flex-col border-t border-neutral-800">
+        {projects.map((project, index) => {
+          const isHovered = hoveredIndex === index;
+          const displayIndex = String(index + 1).padStart(2, "0");
+
+          return (
+            <div
+              key={index}
+              className="group border-b border-neutral-800 py-6"
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {/* Header Row */}
+              <div className="flex items-start justify-between cursor-default">
+                <div className="flex gap-6 sm:gap-8">
+                  <span className="font-mono text-sm text-neutral-500 mt-0.5">
+                    {displayIndex}
+                  </span>
+                  <h3
+                    className={`text-base sm:text-lg font-medium transition-colors duration-300 ${
+                      isHovered ? "text-white" : "text-neutral-400"
+                    }`}
+                  >
                     {project.title}
-                  </h2>
-                  <span className="text-xs font-medium text-neutral-500 bg-neutral-800 rounded-full px-2.5 py-0.5 shrink-0">
+                  </h3>
+                </div>
+                <div className="flex flex-col items-end gap-1 shrink-0">
+                  <span className="font-mono text-sm text-neutral-500">
                     {project.year}
                   </span>
-                </div>
-
-                {/* Description */}
-                <p className="text-sm leading-relaxed text-neutral-400 mb-3">
-                  {project.description}
-                </p>
-
-                {/* Link buttons */}
-                <div className="flex flex-wrap gap-2">
-                  {project.links.map((link, linkIndex) => (
-                    <Link
-                      key={linkIndex}
-                      href={link.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-medium px-3 py-1.5 rounded-lg border border-neutral-700 bg-neutral-800/80 text-neutral-300 hover:text-white hover:border-neutral-500 hover:bg-neutral-700/80 transition-all duration-200"
-                    >
-                      {link.label}
-                      <FiExternalLink className="w-3 h-3" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              /* Single-link project: entire card is clickable */
-              <Link
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group block rounded-xl border border-neutral-800 bg-neutral-900/50 p-5 transition-all duration-300 hover:border-neutral-600 hover:bg-neutral-800/60"
-              >
-                {/* Top row: title + year */}
-                <div className="flex items-center justify-between gap-3 mb-2">
-                  <h2 className="text-[15px] font-medium text-white group-hover:text-blue-400 transition-colors duration-300">
-                    {project.title}
-                  </h2>
-                  <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs font-medium text-neutral-500 bg-neutral-800 rounded-full px-2.5 py-0.5">
-                      {project.year}
-                    </span>
-                    <FiExternalLink className="w-3.5 h-3.5 text-neutral-600 group-hover:text-neutral-400 transition-colors duration-300" />
+                  <div className="px-1 border border-neutral-800 rounded font-mono text-[10px] sm:text-xs text-neutral-500 uppercase">
+                    [{project.category}]
                   </div>
                 </div>
+              </div>
 
-                {/* Description */}
-                <p className="text-sm leading-relaxed text-neutral-400 group-hover:text-neutral-300 transition-colors duration-300">
-                  {project.description}
-                </p>
-              </Link>
-            )}
-          </motion.div>
-        ))}
-      </motion.div>
+              {/* Expandable Content */}
+              <motion.div
+                initial={{ height: 0, opacity: 0 }}
+                animate={{
+                  height: isHovered ? "auto" : 0,
+                  opacity: isHovered ? 1 : 0,
+                }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="overflow-hidden"
+              >
+                <div className="pl-10 sm:pl-12 pr-4 pt-4 pb-2">
+                  <p className="text-sm text-neutral-400 max-w-2xl leading-relaxed">
+                    {project.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {project.tags.map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="px-2 py-1 border border-neutral-800 rounded font-mono text-[11px] text-neutral-400"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {project.links && project.links.length > 0 && (
+                    <div className="flex flex-wrap gap-4 mt-6">
+                      {project.links.map((link, linkIndex) => (
+                        <Link
+                          key={linkIndex}
+                          href={link.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 text-xs font-mono text-neutral-400 hover:text-white transition-colors duration-200"
+                        >
+                          {link.label}
+                          <FiArrowUpRight className="w-3.5 h-3.5" />
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </div>
+          );
+        })}
+      </div>
     </section>
   );
 }

@@ -47,7 +47,7 @@ export default function Footer() {
   return (
     <footer className="  flex flex-col lg:flex-row justify-between items-center lg:mt-12 mt-12 text-white">
       <p className="  mb-4 lg:mb-0 text-sm">
-        sidadrian3@gmail.com / sabdigamon@addu.edu.ph
+        sidadrian3@gmail.com
       </p>
       <SocialLinks />
       <style jsx>{`

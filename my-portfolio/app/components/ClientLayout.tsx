@@ -3,8 +3,6 @@
 import "../global.css";
 import { Navbar } from "../components/nav";
 import Footer from "../components/footer";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Jockey_One, Roboto_Flex } from "next/font/google";

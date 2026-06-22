@@ -3,6 +3,8 @@ import Image from "next/image";
 import { socialLinks } from "./config";
 import { useState } from "react";
 import { TypeAnimation } from "react-type-animation";
+import { NowPlaying } from "./components/NowPlaying";
+import { SpotifyTopTracks } from "./components/SpotifyTopTracks";
 
 export default function Page() {
   // const [src, setSrc] = useState("/myprofile.jpg"); // Default to the main image
@@ -42,16 +44,11 @@ export default function Page() {
             I'll find it, whichever come first.
           </p>
         </div>
-        <div className="mt-12">
-          {/* Spotify Playlist Placeholder */}
-          <div className="w-full h-80 bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-center">
-            <div className="text-center">
-              <span className="block text-2xl mb-2">🎵</span>
-              <p className="text-neutral-500 font-mono text-sm">Spotify Playlist Placeholder</p>
-              <p className="text-neutral-600 text-xs mt-1">Embed an iframe here</p>
-            </div>
+          <div className="mt-12">
+            <h2 className="text-2xl font-semibold text-white mb-6">Music</h2>
+            <NowPlaying />
+            <SpotifyTopTracks />
           </div>
-        </div>
       </div>
     </section>
   );

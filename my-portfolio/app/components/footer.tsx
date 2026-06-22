@@ -28,7 +28,7 @@ function SocialLink({ href, icon: Icon }) {
 
 function SocialLinks() {
   return (
-    <div className="  flex text-lg gap-3.5 transition-opacity duration-300 hover:opacity-90">
+    <div className="  flex text-xl gap-3.5 transition-opacity duration-300 hover:opacity-90">
       <SocialLink href={socialLinks.github} icon={FaGithub} />
       <SocialLink href={socialLinks.instagram} icon={FaInstagram} />
       <SocialLink href={socialLinks.linkedin} icon={FaLinkedinIn} />
@@ -46,7 +46,7 @@ function SocialLinks() {
 export default function Footer() {
   return (
     <footer className="  flex flex-col lg:flex-row justify-between items-center lg:mt-12 mt-12 text-white">
-      <p className="  mb-4 lg:mb-0 text-sm">
+      <p className="  mb-4 lg:mb-0 text-xl">
         sidadrian3@gmail.com
       </p>
       <SocialLinks />

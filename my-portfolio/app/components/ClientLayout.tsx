@@ -35,7 +35,7 @@ export default function ClientLayout({
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1 }} // Increased from 1 to 2
-      className="rounded-lg bg-black text-white flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[650px] w-full p-9"
+      className="rounded-lg bg-black text-white flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[1000px] w-full p-9"
     >
       <motion.div
         initial={{ opacity: 0, y: 20 }}

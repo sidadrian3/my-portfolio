@@ -16,6 +16,7 @@ module.exports = {
       fontFamily:{
         robotoFlex: ["var(--font-roboto-flex)"],
         jockeyOne: ["var(--font-jockey-one)"],
+        inter: ["var(--font-inter)"],
       },
       typography: {
         quoteless: {

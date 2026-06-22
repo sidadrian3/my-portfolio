@@ -3,8 +3,6 @@ import Image from "next/image";
 import { socialLinks } from "./config";
 import { useState } from "react";
 import { TypeAnimation } from "react-type-animation";
-import TechStack from "./components/techStack";
-import { Timeline } from "./components/Timeline";
 
 export default function Page() {
   // const [src, setSrc] = useState("/myprofile.jpg"); // Default to the main image
@@ -45,7 +43,14 @@ export default function Page() {
           </p>
         </div>
         <div className="mt-12">
-          <Timeline />
+          {/* Spotify Playlist Placeholder */}
+          <div className="w-full h-80 bg-neutral-900 rounded-xl border border-neutral-800 flex items-center justify-center">
+            <div className="text-center">
+              <span className="block text-2xl mb-2">🎵</span>
+              <p className="text-neutral-500 font-mono text-sm">Spotify Playlist Placeholder</p>
+              <p className="text-neutral-600 text-xs mt-1">Embed an iframe here</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

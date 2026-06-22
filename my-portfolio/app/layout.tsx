@@ -23,7 +23,7 @@ const robotoFlex = Roboto_Flex({
   variable: "--font-roboto-flex",
 });
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(metaData.baseUrl),
@@ -92,7 +92,7 @@ export default function RootLayout({
       </head>
 
       <body
-        className={`${jockeyOne.variable} ${robotoFlex.variable} bg-black min-h-screen antialiased flex flex-col items-center justify-center mx-auto font-robotoFlex`}
+        className={`${jockeyOne.variable} ${robotoFlex.variable} ${inter.variable} bg-black min-h-screen antialiased flex flex-col items-center justify-center mx-auto font-robotoFlex`}
       >
         <ClientLayout>{children}</ClientLayout>
       </body>

@@ -17,7 +17,7 @@ const robotoFlex = Roboto_Flex({
 });
 
 const navItems = {
-  "/projects": { name: "Projects" },
+  "/about": { name: "About" },
   "/photos": { name: "Photos" },
   "/contact": { name: "Contact" },
 };
@@ -39,7 +39,7 @@ export function Navbar() {
             <Link
               key={path}
               href={path}
-              className="transition-transform transform hover:scale-105 text-white flex align-middle relative"
+              className="transition-transform transform hover:scale-105 text-2xl font-inter text-white flex align-middle relative"
             >
               {name}
             </Link>

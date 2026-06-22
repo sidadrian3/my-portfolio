@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 interface ImageGridProps {
   images: {
@@ -24,7 +27,12 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
     <section>
       <div className={`grid ${gridClass} gap-4 my-8`}>
         {images.map((image, index) => (
-          <div key={index} className="relative aspect-square">
+          <motion.div 
+            key={index} 
+            className="relative aspect-square"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
             {image.href ? (
               <a
                 target="_blank"
@@ -51,7 +59,7 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
                 className="rounded-lg object-cover"
               />
             )}
-          </div>
+          </motion.div>
         ))}
       </div>
     </section>

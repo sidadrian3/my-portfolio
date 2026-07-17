@@ -28,7 +28,7 @@ export function NowPlaying() {
 
         if (json.albumImageUrl) {
           const fac = new FastAverageColor();
-          fac.getColorAsync(json.albumImageUrl, { algorithm: 'dominant' })
+          fac.getColorAsync(json.albumImageUrl, { algorithm: 'dominant', crossOrigin: 'anonymous' })
             .then(color => setDominantColor(color.hex))
             .catch(err => console.error(err));
         }

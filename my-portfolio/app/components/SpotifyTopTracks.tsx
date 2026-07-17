@@ -21,7 +21,7 @@ function TrackItem({ track, index }: { track: Track; index: number }) {
   useEffect(() => {
     if (track.albumImageUrl) {
       const fac = new FastAverageColor();
-      fac.getColorAsync(track.albumImageUrl, { algorithm: 'dominant' })
+      fac.getColorAsync(track.albumImageUrl, { algorithm: 'dominant', crossOrigin: 'anonymous' })
         .then(color => setDominantColor(color.hex))
         .catch(err => console.error(err));
     }

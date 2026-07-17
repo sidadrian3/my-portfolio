@@ -23,7 +23,7 @@ export default function Page() {
             priority
           />
         </a>
-        <h1 className="mb-8 text-3xl font-medium text-center sm:text-left">
+        <h1 className="mb-12 text-5xl font-inter text-center sm:text-left">
           <TypeAnimation
             sequence={[
               "Hello there,",
@@ -37,18 +37,18 @@ export default function Page() {
             className="text-white"
           />
         </h1>
-        <div className="prose prose-neutral prose-invert !text-white">
+        <div className=" text-xl prose prose-neutral prose-invert !text-white">
           <p>
             I'm a graduate of Ateneo de Davao University with a degree in Computer
             Science. Living life, finding purpose. May opportunities come, or
             I'll find it, whichever come first.
           </p>
         </div>
-          <div className="mt-12">
-            <h2 className="text-2xl font-semibold text-white mb-6">Music</h2>
-            <NowPlaying />
-            <SpotifyTopTracks />
-          </div>
+        <div className="mt-12">
+          <h2 className="text-3xl font-semibold text-white mb-6">Music</h2>
+          <NowPlaying />
+          <SpotifyTopTracks />
+        </div>
       </div>
     </section>
   );

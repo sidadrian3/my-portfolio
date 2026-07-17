@@ -11,6 +11,7 @@ export interface Project {
   category: string;
   tags: string[];
   links?: ProjectLink[];
+  color: string;
 }
 
 export const projects: Project[] = [
@@ -28,6 +29,7 @@ export const projects: Project[] = [
         url: "https://www.facebook.com/SAMAHANSysDev/posts/pfbid0jgTfXinNpboBdi5GRC2oGFjcGzEur75wXVnfCoZHpVYxrGTai7n1HZ49KKnvFM7vl",
       },
     ],
+    color: "#3b82f6", // blue-500
   },
   {
     title: "Food Ordering Inventory Management System",
@@ -39,6 +41,7 @@ export const projects: Project[] = [
     links: [
       { label: "GitHub", url: "https://github.com/JamesManon-og/FoodOrdering" }
     ],
+    color: "#8b5cf6", // violet-500
   },
   {
     title: "Project Management System",
@@ -50,5 +53,6 @@ export const projects: Project[] = [
     links: [
       { label: "GitHub", url: "https://github.com" }
     ],
+    color: "#10b981", // emerald-500
   },
 ];

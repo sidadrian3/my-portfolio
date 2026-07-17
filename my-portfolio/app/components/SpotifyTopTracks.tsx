@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import { FastAverageColor } from "fast-average-color";
+
 
 interface Track {
   title: string;
@@ -10,6 +12,65 @@ interface Track {
   album: string;
   albumImageUrl: string;
   songUrl: string;
+}
+
+
+function TrackItem({ track, index }: { track: Track; index: number }) {
+  const [dominantColor, setDominantColor] = useState<string>("transparent");
+
+  useEffect(() => {
+    if (track.albumImageUrl) {
+      const fac = new FastAverageColor();
+      fac.getColorAsync(track.albumImageUrl, { algorithm: 'dominant' })
+        .then(color => setDominantColor(color.hex))
+        .catch(err => console.error(err));
+    }
+  }, [track.albumImageUrl]);
+
+  return (
+    <a
+      href={track.songUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="group relative flex items-center gap-4 bg-neutral-900/50 rounded-lg p-3 transition-all hover:bg-neutral-800 overflow-hidden hover:scale-[1.01] hover:border-neutral-700 border border-transparent"
+    >
+      {/* Glow effects that appear on hover */}
+      <div
+        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-40 blur-2xl z-0"
+        style={{ background: `radial-gradient(circle at 20% 50%, ${dominantColor}, transparent 70%)` }}
+      />
+      <div
+        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0"
+        style={{ backgroundImage: `linear-gradient(90deg, ${dominantColor}40 0%, transparent 100%)` }}
+      />
+
+      <span className="w-8 text-center text-base font-medium text-neutral-500 group-hover:text-white transition-colors z-10">
+        {index + 1}
+      </span>
+      <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded shadow-md z-10">
+        {track.albumImageUrl ? (
+          <Image
+            src={track.albumImageUrl}
+            alt={`${track.title} album art`}
+            fill
+            crossOrigin="anonymous"
+            unoptimized={true}
+            className="object-cover transition-transform duration-500 group-hover:scale-110"
+          />
+        ) : (
+          <div className="w-full h-full bg-neutral-800" />
+        )}
+      </div>
+      <div className="flex flex-col min-w-0 z-10">
+        <p className="text-neutral-200 text-lg font-medium truncate group-hover:text-white transition-colors">
+          {track.title}
+        </p>
+        <p className="text-neutral-400 text-base truncate">
+          {track.artist}
+        </p>
+      </div>
+    </a>
+  );
 }
 
 export function SpotifyTopTracks() {
@@ -38,8 +99,8 @@ export function SpotifyTopTracks() {
 
   return (
     <div className="w-full mt-4">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-semibold text-white">Top Tracks</h2>
+      <div className="flex items-center justify-between mb-4 mt-12">
+        <h2 className="text-2xl font-semibold text-white">Top Tracks</h2>
         <div className="flex gap-2 bg-neutral-900 p-1 rounded-lg border border-neutral-800">
           {[
             { id: "short_term", label: "4 Weeks" },
@@ -49,11 +110,10 @@ export function SpotifyTopTracks() {
             <button
               key={range.id}
               onClick={() => setTimeRange(range.id)}
-              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${
-                timeRange === range.id
-                  ? "bg-white text-black"
-                  : "text-neutral-400 hover:text-white hover:bg-neutral-800"
-              }`}
+              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${timeRange === range.id
+                ? "bg-white text-black"
+                : "text-neutral-400 hover:text-white hover:bg-neutral-800"
+                }`}
             >
               {range.label}
             </button>
@@ -73,11 +133,11 @@ export function SpotifyTopTracks() {
             >
               {[1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="flex items-center gap-4 bg-neutral-900/30 rounded-lg p-3 animate-pulse">
-                  <div className="w-6 text-center"><div className="w-3 h-4 bg-neutral-800 mx-auto rounded"></div></div>
-                  <div className="w-12 h-12 bg-neutral-800 rounded shrink-0"></div>
+                  <div className="w-8 text-center"><div className="w-4 h-5 bg-neutral-800 mx-auto rounded"></div></div>
+                  <div className="w-16 h-16 bg-neutral-800 rounded shrink-0"></div>
                   <div className="flex flex-col gap-2 w-full">
-                    <div className="h-4 bg-neutral-800 rounded w-1/3"></div>
-                    <div className="h-3 bg-neutral-800 rounded w-1/4"></div>
+                    <div className="h-5 bg-neutral-800 rounded w-1/3"></div>
+                    <div className="h-4 bg-neutral-800 rounded w-1/4"></div>
                   </div>
                 </div>
               ))}
@@ -92,37 +152,7 @@ export function SpotifyTopTracks() {
               className="flex flex-col gap-3"
             >
               {tracks.map((track, i) => (
-                <a
-                  key={track.title}
-                  href={track.songUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group flex items-center gap-4 bg-neutral-900/50 rounded-lg p-3 transition-colors hover:bg-neutral-800"
-                >
-                  <span className="w-6 text-center text-sm font-medium text-neutral-500 group-hover:text-white transition-colors">
-                    {i + 1}
-                  </span>
-                  <div className="relative w-12 h-12 shrink-0 overflow-hidden rounded">
-                    {track.albumImageUrl ? (
-                      <Image
-                        src={track.albumImageUrl}
-                        alt={`${track.title} album art`}
-                        fill
-                        className="object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full bg-neutral-800" />
-                    )}
-                  </div>
-                  <div className="flex flex-col min-w-0">
-                    <p className="text-neutral-200 font-medium truncate group-hover:text-white transition-colors">
-                      {track.title}
-                    </p>
-                    <p className="text-neutral-400 text-sm truncate">
-                      {track.artist}
-                    </p>
-                  </div>
-                </a>
+                <TrackItem key={track.title} track={track} index={i} />
               ))}
             </motion.div>
           )}

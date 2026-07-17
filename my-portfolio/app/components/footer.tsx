@@ -45,19 +45,16 @@ function SocialLinks() {
 
 export default function Footer() {
   return (
-    <footer className="  flex flex-col lg:flex-row justify-between items-center lg:mt-12 mt-12 text-white">
-      <p className="  mb-4 lg:mb-0 text-xl">
-        sidadrian3@gmail.com
-      </p>
+    <footer className="w-full pt-8 pb-4 mt-8 flex flex-col md:flex-row justify-between items-center gap-6 border-t border-white/[0.06]">
+      <div className="flex flex-col items-center md:items-start gap-1">
+        <p className="text-sm text-white/50 font-medium">
+          Sid Adrian B. Digamon
+        </p>
+        <p className="text-xs text-white/30">
+          sidadrian3@gmail.com
+        </p>
+      </div>
       <SocialLinks />
-      <style jsx>{`
-        @media screen and (max-width: 480px) {
-          footer {
-            flex-direction: column;
-            align-items: center;
-          }
-        }
-      `}</style>
     </footer>
   );
 }

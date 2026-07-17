@@ -35,16 +35,16 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
           {images.map((image, index) => (
             <motion.div 
               key={index} 
-              className="relative aspect-square"
-              whileHover={{ scale: 1.05 }}
-              transition={{ type: "spring", stiffness: 400, damping: 17 }}
+              className="relative aspect-square overflow-hidden rounded-2xl bg-white/[0.02] border border-white/[0.05]"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3, ease: "easeOut" }}
             >
               {image.href ? (
                 <Link
                   target={image.href.startsWith("http") ? "_blank" : undefined}
                   rel={image.href.startsWith("http") ? "noopener noreferrer" : undefined}
                   href={image.href}
-                  className="block w-full h-full relative"
+                  className="block w-full h-full relative group"
                 >
                   <Image
                     alt={image.alt}
@@ -52,18 +52,22 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
                     fill
                     sizes="(max-width: 768px) 50vw, 33vw"
                     priority
-                    className="rounded-lg object-cover"
+                    className="object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-105"
                   />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                 </Link>
               ) : (
-                <Image
-                  alt={image.alt}
-                  src={image.src}
-                  fill
-                  sizes="(max-width: 768px) 50vw, 33vw"
-                  priority
-                  className="rounded-lg object-cover"
-                />
+                <div className="w-full h-full relative group">
+                  <Image
+                    alt={image.alt}
+                    src={image.src}
+                    fill
+                    sizes="(max-width: 768px) 50vw, 33vw"
+                    priority
+                    className="object-cover transition-all duration-500 group-hover:brightness-110 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
               )}
             </motion.div>
           ))}
@@ -71,15 +75,17 @@ export const ImageGrid: React.FC<ImageGridProps> = ({
         {viewMoreHref && (
           <motion.div
             className="flex items-center justify-start h-full pl-2 shrink-0"
-            whileHover={{ x: 5 }}
-            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            whileHover={{ x: 4 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
           >
             <Link
               href={viewMoreHref}
-              className="group"
+              className="group flex flex-col items-center gap-3 px-4 py-3 rounded-2xl border border-white/10 hover:bg-white/[0.03] hover:border-white/20 transition-all duration-300"
             >
-              <span className="text-neutral-500 font-medium tracking-wide flex flex-col items-center gap-2 group-hover:text-white transition-colors duration-300">
-                 <FiArrowRight className="w-6 h-6 group-hover:translate-x-1 transition-transform duration-300" />
+              <div className="w-8 h-8 rounded-full bg-white/[0.05] flex items-center justify-center group-hover:bg-white/10 transition-colors">
+                <FiArrowRight className="w-4 h-4 text-white/50 group-hover:text-white transition-colors" />
+              </div>
+              <span className="text-[10px] uppercase tracking-wider text-white/40 group-hover:text-white/80 transition-colors font-medium">
                  View More
               </span>
             </Link>

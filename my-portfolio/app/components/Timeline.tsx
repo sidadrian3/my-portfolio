@@ -2,17 +2,14 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { timelineData } from "./timeline-data";
+import { SectionLabel } from "./SectionLabel";
 
 
 export function Timeline() {
   return (
-    <motion.div whileHover={{
-      scale: 1.03
-    }}>
+    <div>
       <section>
-        <h3 className="font-mono text-2xl uppercase text-neutral-400 tracking-widest mb-4">
-          [01] Chronicle
-        </h3>
+        <SectionLabel>Chronicle</SectionLabel>
 
         <div className="flex flex-col">
           {timelineData.map((item, index) => (
@@ -22,7 +19,7 @@ export function Timeline() {
               initial="initial">
               {/* Vertical Line */}
               {index !== timelineData.length - 1 && (
-                <div className="absolute left-[5px] top-6 bottom-0 w-[1px] bg-neutral-800" />
+                <div className="absolute left-[5px] top-6 bottom-0 w-[1px] bg-gradient-to-b from-white/10 via-white/5 to-transparent" />
               )}
 
               {/* Circle Marker */}
@@ -42,15 +39,15 @@ export function Timeline() {
               <motion.div className="flex flex-col gap-1"
                 variants={{
                   initial: { x: 0 },
-                  hover: { x: 8 }
+                  hover: { x: 4 }
                 }}>
-                <span className="font-mono text-base text-neutral-500">
-                  {item.year} [{item.tag}]
+                <span className="font-mono text-xs text-white/30 tracking-wide">
+                  {item.year} <span className="uppercase opacity-70">[{item.tag}]</span>
                 </span>
-                <h3 className="text-xl font-medium text-neutral-100 mt-1 mb-1">
+                <h3 className="text-xl font-medium text-white/90 mt-1 mb-1">
                   {item.title}
                 </h3>
-                <p className="text-base text-neutral-400 max-w-xl">
+                <p className="text-sm text-white/50 leading-relaxed max-w-xl">
                   {item.description}
                 </p>
               </motion.div>
@@ -58,6 +55,6 @@ export function Timeline() {
           ))}
         </div>
       </section>
-    </motion.div>
+    </div>
   );
 }

@@ -32,22 +32,22 @@ function TrackItem({ track, index }: { track: Track; index: number }) {
       href={track.songUrl}
       target="_blank"
       rel="noopener noreferrer"
-      className="group relative flex items-center gap-4 bg-neutral-900/50 rounded-lg p-3 transition-all hover:bg-neutral-800 overflow-hidden hover:scale-[1.01] hover:border-neutral-700 border border-transparent"
+      className="group relative flex items-center gap-4 bg-white/[0.03] hover:bg-white/[0.07] border border-white/[0.05] rounded-xl p-3 transition-all duration-300 overflow-hidden hover:shadow-lg"
     >
       {/* Glow effects that appear on hover */}
       <div
-        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-40 blur-2xl z-0"
+        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-40 blur-2xl z-0 pointer-events-none"
         style={{ background: `radial-gradient(circle at 20% 50%, ${dominantColor}, transparent 70%)` }}
       />
       <div
-        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0"
+        className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 z-0 pointer-events-none"
         style={{ backgroundImage: `linear-gradient(90deg, ${dominantColor}40 0%, transparent 100%)` }}
       />
 
-      <span className="w-8 text-center text-base font-medium text-neutral-500 group-hover:text-white transition-colors z-10">
+      <span className="w-8 text-center text-sm font-mono text-white/30 group-hover:text-white/70 transition-colors z-10">
         {index + 1}
       </span>
-      <div className="relative w-16 h-16 shrink-0 overflow-hidden rounded shadow-md z-10">
+      <div className="relative w-14 h-14 shrink-0 overflow-hidden rounded-lg shadow-md z-10">
         {track.albumImageUrl ? (
           <Image
             src={track.albumImageUrl}
@@ -55,17 +55,17 @@ function TrackItem({ track, index }: { track: Track; index: number }) {
             fill
             crossOrigin="anonymous"
             unoptimized={true}
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full bg-neutral-800" />
+          <div className="w-full h-full bg-white/[0.05]" />
         )}
       </div>
       <div className="flex flex-col min-w-0 z-10">
-        <p className="text-neutral-200 text-lg font-medium truncate group-hover:text-white transition-colors">
+        <p className="text-white/90 text-base font-medium truncate group-hover:text-white transition-colors">
           {track.title}
         </p>
-        <p className="text-neutral-400 text-base truncate">
+        <p className="text-white/50 text-sm truncate">
           {track.artist}
         </p>
       </div>
@@ -100,8 +100,8 @@ export function SpotifyTopTracks() {
   return (
     <div className="w-full mt-4">
       <div className="flex items-center justify-between mb-4 mt-12">
-        <h2 className="text-2xl font-semibold text-white">Top Tracks</h2>
-        <div className="flex gap-2 bg-neutral-900 p-1 rounded-lg border border-neutral-800">
+        <h2 className="text-[10px] uppercase tracking-[0.15em] text-white/40">Top Tracks</h2>
+        <div className="flex gap-1 bg-white/[0.04] backdrop-blur-md p-1 rounded-[10px] border border-white/[0.08]">
           {[
             { id: "short_term", label: "4 Weeks" },
             { id: "medium_term", label: "6 Months" },
@@ -110,9 +110,9 @@ export function SpotifyTopTracks() {
             <button
               key={range.id}
               onClick={() => setTimeRange(range.id)}
-              className={`px-3 py-1 text-xs font-medium rounded-md transition-colors ${timeRange === range.id
-                ? "bg-white text-black"
-                : "text-neutral-400 hover:text-white hover:bg-neutral-800"
+              className={`px-3 py-1.5 text-[11px] font-medium rounded-lg transition-all duration-200 ${timeRange === range.id
+                ? "bg-white/15 text-white shadow-sm"
+                : "text-white/40 hover:text-white hover:bg-white/[0.06]"
                 }`}
             >
               {range.label}
@@ -121,7 +121,7 @@ export function SpotifyTopTracks() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-2">
         <AnimatePresence mode="wait">
           {loading ? (
             <motion.div
@@ -129,15 +129,15 @@ export function SpotifyTopTracks() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="flex flex-col gap-3"
+              className="flex flex-col gap-2"
             >
               {[1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="flex items-center gap-4 bg-neutral-900/30 rounded-lg p-3 animate-pulse">
-                  <div className="w-8 text-center"><div className="w-4 h-5 bg-neutral-800 mx-auto rounded"></div></div>
-                  <div className="w-16 h-16 bg-neutral-800 rounded shrink-0"></div>
+                <div key={i} className="flex items-center gap-4 bg-white/[0.02] border border-white/[0.05] rounded-xl p-3 animate-pulse">
+                  <div className="w-8 text-center"><div className="w-4 h-4 bg-white/[0.05] mx-auto rounded"></div></div>
+                  <div className="w-14 h-14 bg-white/[0.05] rounded-lg shrink-0"></div>
                   <div className="flex flex-col gap-2 w-full">
-                    <div className="h-5 bg-neutral-800 rounded w-1/3"></div>
-                    <div className="h-4 bg-neutral-800 rounded w-1/4"></div>
+                    <div className="h-4 bg-white/[0.05] rounded w-1/3"></div>
+                    <div className="h-3 bg-white/[0.05] rounded w-1/4"></div>
                   </div>
                 </div>
               ))}

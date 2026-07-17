@@ -9,6 +9,15 @@
 
 /* Light theme colors */
 :root {
+  --apple-accent: #F5F0E8;
+  --apple-glass: rgba(255, 255, 255, 0.04);
+  --apple-glass-border: rgba(255, 255, 255, 0.08);
+  --apple-blur: 20px;
+  --apple-shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.04);
+  --apple-shadow-md: 0 4px 24px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.06);
+  --apple-radius: 14px;
+  --apple-radius-lg: 20px;
+
   --sh-class: #2d5e9d;
   --sh-identifier: #354150;
   --sh-sign: #8996a3;
@@ -36,6 +45,20 @@
 
 html {
   min-width: 360px;
+  scroll-behavior: smooth;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+.glass-card {
+  @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-[14px];
+}
+
+.glass-panel {
+  @apply bg-black/70 backdrop-blur-[20px] border-b border-white/[0.06];
+}
+
+.apple-shadow {
+  box-shadow: var(--apple-shadow-md);
 }
 
 .prose {

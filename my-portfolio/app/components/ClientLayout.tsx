@@ -6,6 +6,7 @@ import Footer from "../components/footer";
 import { motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { Jockey_One, Roboto_Flex } from "next/font/google";
+import { GrainOverlay } from "./GrainOverlay";
 
 // Import the fonts
 const jockeyOne = Jockey_One({
@@ -28,37 +29,37 @@ export default function ClientLayout({
   const pathname = usePathname();
 
   return (
-    <motion.div
-      key={pathname}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }} // Increased from 1 to 2
-      className="rounded-lg bg-black text-white flex-auto min-w-0 mt-2 md:mt-6 flex flex-col px-6 sm:px-4 md:px-9 max-w-[1000px] w-full p-9"
-    >
+    <>
+      <GrainOverlay />
+      <div className="fixed inset-0 pointer-events-none z-[-1]" style={{ background: 'radial-gradient(ellipse at top, rgba(255,255,255,0.03), transparent 60%)' }} />
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0 }} // Increased from 0.5 to 1
+        key={pathname}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.2, ease: "easeOut" }}
+        className="text-white flex-auto min-w-0 flex flex-col w-full relative isolate"
       >
         <Navbar />
-      </motion.div>
 
-      <motion.main
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 0.8 }} // Increased delay from 0.3 to 1.5
-        className="flex-grow"
-      >
-        {children}
-      </motion.main>
+        <div className="px-6 sm:px-4 md:px-9 max-w-[1000px] w-full mx-auto flex flex-col flex-grow mt-8 mb-12">
+          <motion.main
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
+            className="flex-grow flex flex-col gap-16"
+          >
+            {children}
+          </motion.main>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, delay: 1.2 }} // Increased delay from 0.6 to 2.5
-      >
-        <Footer />
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.2, ease: "easeOut" }}
+          >
+            <Footer />
+          </motion.div>
+        </div>
       </motion.div>
-    </motion.div>
+    </>
   );
 }

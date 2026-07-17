@@ -22,29 +22,40 @@ const navItems = {
   "/contact": { name: "Contact" },
 };
 
+import { usePathname } from "next/navigation";
+
 export function Navbar() {
+  const pathname = usePathname();
+  
   return (
-    <nav className=" lg:mb-8 py-5">
-      <div className="flex flex-col md:flex-row md:items-center justify-between">
+    <nav className="sticky top-0 z-40 w-full glass-panel lg:mb-8 transition-all duration-300">
+      <div className="max-w-[1000px] mx-auto px-6 sm:px-4 md:px-9 flex flex-col md:flex-row md:items-center justify-between py-4">
         <div className="flex items-center">
           <Link
             href="/"
-            className={`${robotoFlex.variable} transition-transform transform hover:scale-105 text-5xl font-semibold font-robotoFlex `}
+            className={`${robotoFlex.variable} text-2xl font-light tracking-tight font-robotoFlex opacity-90 hover:opacity-100 transition-opacity`}
           >
             {metaData.title}
           </Link>
         </div>
-        <div className="flex flex-row gap-4 mt-6 md:mt-0 md:ml-auto items-center">
-          {Object.entries(navItems).map(([path, { name }]) => (
-            <Link
-              key={path}
-              href={path}
-              className="transition-transform transform hover:scale-105 text-2xl font-inter text-white flex align-middle relative"
-            >
-              {name}
-            </Link>
-          ))}
-          {/* <ThemeSwitch /> */}
+        <div className="flex flex-row gap-6 mt-4 md:mt-0 md:ml-auto items-center overflow-x-auto no-scrollbar">
+          {Object.entries(navItems).map(([path, { name }]) => {
+            const isActive = pathname === path;
+            return (
+              <Link
+                key={path}
+                href={path}
+                className={`text-sm font-normal transition-all duration-300 relative ${
+                  isActive ? "text-white" : "text-white/60 hover:text-white"
+                }`}
+              >
+                {name}
+                {isActive && (
+                  <span className="absolute -bottom-1 left-0 w-full h-[1px] bg-white rounded-full" />
+                )}
+              </Link>
+            );
+          })}
         </div>
       </div>
     </nav>

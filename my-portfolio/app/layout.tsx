@@ -1,24 +1,15 @@
 import "./global.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Roboto_Flex } from "next/font/google";
 import { metaData } from "./config";
 import ClientLayout from "./components/ClientLayout";
-import { Jockey_One, Roboto_Flex } from "next/font/google";
-
-// Import the fonts
-const jockeyOne = Jockey_One({
-  subsets: ["latin"],
-  weight: "400", // Jockey One only has one weight
-  variable: "--font-jockey-one",
-});
+import { ThemeProvider } from "./components/ThemeProvider";
 
 const robotoFlex = Roboto_Flex({
   subsets: ["latin"],
-  weight: ["100", "400", "700"], // Specify weights you want to use
   variable: "--font-roboto-flex",
+  display: "swap",
 });
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   metadataBase: new URL(metaData.baseUrl),
@@ -51,12 +42,7 @@ export const metadata: Metadata = {
     title: metaData.name,
     card: "summary_large_image",
   },
-  // icons: {
-  //   icon: "/favicon.ico",
-  // },
 };
-
-const cx = (...classes) => classes.filter(Boolean).join(" ");
 
 export default function RootLayout({
   children,
@@ -64,32 +50,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.className}`}>
-      <head>
-        <link
-          rel="alternate"
-          type="application/rss+xml"
-          href="/rss.xml"
-          title="RSS Feed"
-        />
-        <link
-          rel="alternate"
-          type="application/atom+xml"
-          href="/atom.xml"
-          title="Atom Feed"
-        />
-        <link
-          rel="alternate"
-          type="application/feed+json"
-          href="/feed.json"
-          title="JSON Feed"
-        />
-      </head>
-
-      <body
-        className={`${jockeyOne.variable} ${robotoFlex.variable} ${inter.variable} bg-black min-h-screen antialiased flex flex-col items-center justify-center mx-auto font-robotoFlex`}
-      >
-        <ClientLayout>{children}</ClientLayout>
+    <html lang="en" suppressHydrationWarning className={robotoFlex.variable}>
+      <body className="bg-bg text-ink font-sans antialiased">
+        <ThemeProvider>
+          <ClientLayout>{children}</ClientLayout>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -2,45 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
-::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
-}
-
-/* Light theme colors */
+/* Dark is the default: values live in :root, light overrides in .light */
 :root {
-  --apple-accent: #F5F0E8;
-  --apple-glass: rgba(255, 255, 255, 0.04);
-  --apple-glass-border: rgba(255, 255, 255, 0.08);
-  --apple-blur: 20px;
-  --apple-shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.04);
-  --apple-shadow-md: 0 4px 24px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.06);
-  --apple-radius: 14px;
-  --apple-radius-lg: 20px;
+  color-scheme: dark;
+  --bg: 0 0 0;
+  --ink: 245 240 232;
+  --mute: 162 158 153;
+  --faint: 127 125 121;
+  --line: 29 29 28;
+  --hi: 15 14 14;
+  --contrib-0: 27 27 26;
+  --contrib-1: 31 58 43;
+  --contrib-2: 46 90 63;
+  --contrib-3: 74 138 95;
+  --contrib-4: 123 191 138;
+  --accent-now: 123 191 138;
+  --grain-opacity: 0.07;
+  --grain-blend: screen;
 
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #8996a3;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+  --apple-shadow-md: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.06);
 }
 
-/* Dark theme colors */
-.dark {
-  background-color: #121212;
-  --sh-class: #4c97f8;
-  --sh-identifier: white;
-  --sh-sign: #8996a3;
-  --sh-string: #0fa295;
-  --sh-keyword: #f47067;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+.light {
+  color-scheme: light;
+  --bg: 245 240 232;
+  --ink: 20 18 16;
+  --mute: 92 89 85;
+  --faint: 106 102 98;
+  --line: 218 213 206;
+  --hi: 234 229 221;
+  --contrib-0: 226 221 213;
+  --contrib-1: 201 220 200;
+  --contrib-2: 156 193 159;
+  --contrib-3: 95 154 108;
+  --contrib-4: 58 110 72;
+  --accent-now: 58 110 72;
+  --grain-opacity: 0.09;
+  --grain-blend: multiply;
+}
+
+/* Typed so the lamp tint can transition; set on the lamp element only */
+@property --lamp {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgb(245 240 232);
 }
 
 html {
@@ -49,6 +54,54 @@ html {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
+body {
+  min-height: 100vh;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+}
+
+::selection {
+  background-color: rgb(var(--ink));
+  color: rgb(var(--bg));
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--ink));
+  outline-offset: 2px;
+}
+
+.lamp {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60vh;
+  z-index: -1;
+  pointer-events: none;
+  --lamp: rgb(var(--ink));
+  background: radial-gradient(
+    ellipse 70% 100% at 50% 0%,
+    color-mix(in srgb, var(--lamp) 14%, transparent),
+    transparent 70%
+  );
+  transition: --lamp 800ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lamp {
+    transition: none;
+  }
+}
+
+/* Legacy surfaces, replaced as the redesign tasks land */
 .glass-card {
   @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-[14px];
 }
@@ -61,88 +114,13 @@ html {
   box-shadow: var(--apple-shadow-md);
 }
 
-.prose {
-  @apply text-[#070606] dark:text-[#FFFFFF];
-}
-
-.prose .anchor {
-  @apply absolute invisible no-underline;
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 80%;
-  max-width: 700px;
-  cursor: pointer;
-}
-
-.anchor:hover {
-  @apply visible;
-}
-
-.prose a {
-  @apply transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em] font-normal text-[#000000] dark:text-[#FFFFFF];
-}
-
-.prose a:hover {
-  @apply dark:decoration-neutral-400 decoration-neutral-600;
-}
-
-.prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
-  content: "#";
-}
-
-.prose *:hover > .anchor {
-  @apply visible;
-}
-
-.prose pre {
-  @apply bg-[#F7F7F7] dark:bg-[#181818] rounded-lg overflow-x-auto;
-}
-
-.prose code {
-  @apply px-1 py-0.5 rounded-lg;
-}
-
-.prose pre code {
-  @apply p-0;
-  border: initial;
-  line-height: 1.5;
-}
-
-.prose code span {
-  @apply font-medium;
-}
-
-.prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0;
-}
-
-.prose h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-medium !important;
-}
-
-.prose strong {
-  @apply font-medium;
-}
-
-.prose > :first-child {
-  /* Override removing top margin, causing layout shift */
-  margin-top: 1.25em !important;
-  margin-bottom: 1.25em !important;
-}
-
 pre::-webkit-scrollbar {
   display: none;
 }
 
 pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 /* Remove Safari input shadow on mobile */
@@ -153,20 +131,11 @@ input[type="email"] {
   appearance: none;
 }
 
-.prose .tweet a {
-  text-decoration: inherit;
-  font-weight: 500;
-}
-
 table {
   display: block;
   max-width: fit-content;
   overflow-x: auto;
   white-space: nowrap;
-}
-
-.prose .callout > p {
-  margin: 0 !important;
 }
 
 .title {

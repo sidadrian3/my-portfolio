@@ -1,25 +1,9 @@
 "use client";
 
-import "../global.css";
 import { Navbar } from "../components/nav";
 import Footer from "../components/footer";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { Jockey_One, Roboto_Flex } from "next/font/google";
-import { GrainOverlay } from "./GrainOverlay";
-
-// Import the fonts
-const jockeyOne = Jockey_One({
-  subsets: ["latin"],
-  weight: "400", // Jockey One only has one weight
-  variable: "--font-jockey-one",
-});
-
-const robotoFlex = Roboto_Flex({
-  subsets: ["latin"],
-  weight: ["100", "400", "700"], // Specify weights you want to use
-  variable: "--font-roboto-flex",
-});
 
 export default function ClientLayout({
   children,
@@ -27,39 +11,24 @@ export default function ClientLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const reduceMotion = useReducedMotion();
 
   return (
-    <>
-      <GrainOverlay />
-      <div className="fixed inset-0 pointer-events-none z-[-1]" style={{ background: 'radial-gradient(ellipse at top, rgba(255,255,255,0.03), transparent 60%)' }} />
-      <motion.div
-        key={pathname}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.2, ease: "easeOut" }}
-        className="text-white flex-auto min-w-0 flex flex-col w-full relative isolate"
-      >
-        <Navbar />
-
-        <div className="px-6 sm:px-4 md:px-9 max-w-[1000px] w-full mx-auto flex flex-col flex-grow mt-8 mb-12">
-          <motion.main
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, delay: 0.1, ease: "easeOut" }}
-            className="flex-grow flex flex-col gap-16"
-          >
-            {children}
-          </motion.main>
-
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.3, delay: 0.2, ease: "easeOut" }}
-          >
-            <Footer />
-          </motion.div>
-        </div>
-      </motion.div>
-    </>
+    <div className="relative isolate flex min-h-screen w-full min-w-0 flex-col">
+      <div data-lamp aria-hidden className="lamp" />
+      <Navbar />
+      <div className="mx-auto flex w-full max-w-[720px] flex-grow flex-col px-4 sm:px-7">
+        <motion.main
+          key={pathname}
+          initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 10 }}
+          animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="mt-8 mb-12 flex flex-grow flex-col gap-16"
+        >
+          {children}
+        </motion.main>
+        <Footer />
+      </div>
+    </div>
   );
 }

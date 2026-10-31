@@ -1,20 +1,6 @@
 import Link from "next/link";
 // import { ThemeSwitch } from "./theme-switch";
 import { metaData } from "../config";
-import { Jockey_One, Roboto_Flex } from "next/font/google";
-
-// Import the fonts
-const jockeyOne = Jockey_One({
-  subsets: ["latin"],
-  weight: "400", // Jockey One only has one weight
-  variable: "--font-jockey-one",
-});
-
-const robotoFlex = Roboto_Flex({
-  subsets: ["latin"],
-  weight: ["100", "400", "700"], // Specify weights you want to use
-  variable: "--font-roboto-flex",
-});
 
 const navItems = {
   "/about": { name: "About" },
@@ -33,7 +19,7 @@ export function Navbar() {
         <div className="flex items-center">
           <Link
             href="/"
-            className={`${robotoFlex.variable} text-2xl font-light tracking-tight font-robotoFlex opacity-90 hover:opacity-100 transition-opacity`}
+            className="text-2xl font-light tracking-tight font-sans opacity-90 hover:opacity-100 transition-opacity"
           >
             {metaData.title}
           </Link>

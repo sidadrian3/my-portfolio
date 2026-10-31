@@ -7,6 +7,8 @@ const STEP = CELL + GAP;
 const DAYS_IN_WEEK = 7;
 const GRAPH_HEIGHT = DAYS_IN_WEEK * STEP - GAP;
 
+const numberFormat = new Intl.NumberFormat("en-US");
+
 const dateFormat = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -34,18 +36,17 @@ function GithubLink({ children }: { children: React.ReactNode }) {
 
 export function ContributionGraphView({ calendar }: { calendar: ContributionCalendar }) {
   const width = calendar.weeks.length * STEP - GAP;
+  const total = numberFormat.format(calendar.total);
 
   return (
     <div>
       <div dir="rtl" className="overflow-x-auto pb-1">
-        <div dir="ltr" className="w-max">
+        <div dir="ltr" className="w-full min-w-[480px]">
           <svg
             role="img"
-            aria-label={`${calendar.total} contributions in the last year`}
-            width={width}
-            height={GRAPH_HEIGHT}
+            aria-label={`${total} contributions in the last year`}
             viewBox={`0 0 ${width} ${GRAPH_HEIGHT}`}
-            className="block max-w-none shrink-0"
+            className="block h-auto w-full"
           >
             {calendar.weeks.map((week, w) =>
               week.days.map((day, d) => (
@@ -66,7 +67,7 @@ export function ContributionGraphView({ calendar }: { calendar: ContributionCale
         </div>
       </div>
       <p className="mt-3 text-sm text-faint">
-        {calendar.total} contributions in the last year · <GithubLink>github ↗</GithubLink>
+        {total} contributions in the last year · <GithubLink>github ↗</GithubLink>
       </p>
     </div>
   );
@@ -90,7 +91,7 @@ export function ContributionGraphSkeleton() {
   return (
     <div aria-hidden>
       <div className="pb-1">
-        <div className="h-[91px] w-full bg-hi" />
+        <div className="h-16 w-full bg-hi sm:aspect-[686/91] sm:h-auto" />
       </div>
       <p className="mt-3 text-sm">&nbsp;</p>
     </div>

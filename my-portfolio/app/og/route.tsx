@@ -3,6 +3,7 @@ import { metaData } from "app/config";
 
 // The bundled OG font has no bold weight, so fetch Roboto Bold for just the glyphs on the card.
 const FONT_TIMEOUT_MS = 2500;
+const MAX_TITLE_LENGTH = 80;
 
 async function loadBoldFont(text: string): Promise<ArrayBuffer | null> {
   try {
@@ -21,7 +22,7 @@ async function loadBoldFont(text: string): Promise<ArrayBuffer | null> {
 
 // Social card: fixed brand colours, since theme tokens don't exist outside the page.
 export async function GET(request: Request) {
-  const title = new URL(request.url).searchParams.get("title") || metaData.title;
+  const title = (new URL(request.url).searchParams.get("title") || metaData.title).slice(0, MAX_TITLE_LENGTH);
   const bold = await loadBoldFont(`sid.${title}`);
 
   return new ImageResponse(

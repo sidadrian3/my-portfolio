@@ -86,10 +86,15 @@ function toTrack(t: SpotifyApiTrack): SpotifyTrack {
   };
 }
 
-async function spotifyGet(path: string): Promise<Response> {
+const TOP_TRACKS_REVALIDATE_S = 3600;
+const RECENTLY_PLAYED_REVALIDATE_S = 60;
+
+// Without `revalidate` the response is not cached (used for the live now-playing call).
+async function spotifyGet(path: string, revalidate?: number): Promise<Response> {
   const accessToken = await getAccessToken();
   return fetch(`${SPOTIFY_API_BASE}${path}`, {
     headers: { Authorization: `Bearer ${accessToken}` },
+    ...(revalidate === undefined ? {} : { next: { revalidate } }),
   });
 }
 
@@ -98,7 +103,8 @@ export async function getTopTracks(
   limit: number = 10
 ): Promise<SpotifyTrack[]> {
   const response = await spotifyGet(
-    `/me/top/tracks?time_range=${timeRange}&limit=${limit}`
+    `/me/top/tracks?time_range=${timeRange}&limit=${limit}`,
+    TOP_TRACKS_REVALIDATE_S
   );
 
   if (!response.ok) {
@@ -110,7 +116,10 @@ export async function getTopTracks(
 }
 
 export async function getRecentlyPlayed(limit: number): Promise<RecentTrack[]> {
-  const response = await spotifyGet(`/me/player/recently-played?limit=${limit}`);
+  const response = await spotifyGet(
+    `/me/player/recently-played?limit=${limit}`,
+    RECENTLY_PLAYED_REVALIDATE_S
+  );
 
   if (response.status === 401 || response.status === 403) {
     throw new SpotifyScopeError(`Spotify API error: ${response.status}`);

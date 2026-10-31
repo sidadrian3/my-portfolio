@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { ContributionCalendar } from "app/lib/github";
+import { formatNumber } from "app/lib/format";
+import { clamp } from "app/lib/math";
 
 const CELL = 10;
 const GAP = 3;
@@ -30,7 +32,6 @@ const LENS_PUSH = (() => {
 
 const LENS_VARS = ["--lx", "--ly", "--ls"] as const;
 
-const numberFormat = new Intl.NumberFormat("en-US");
 const dateFormat = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -43,13 +44,11 @@ type WavePhase = "idle" | "play" | "done";
 type Tip = { x: number; y: number; count: string; date: string };
 
 const cellKey = (w: number, d: number) => `${w}:${d}`;
-const clamp = (value: number, min: number, max: number) =>
-  Math.min(Math.max(value, min), max);
 
 function describeDay(count: number, date: string) {
   const noun = count === 1 ? "contribution" : "contributions";
   return {
-    count: `${numberFormat.format(count)} ${noun}`,
+    count: `${formatNumber(count)} ${noun}`,
     date: dateFormat.format(new Date(`${date}T00:00:00Z`)),
   };
 }
@@ -57,7 +56,7 @@ function describeDay(count: number, date: string) {
 export function ContributionGrid({ calendar }: { calendar: ContributionCalendar }) {
   const { weeks } = calendar;
   const width = weeks.length * STEP - GAP;
-  const total = numberFormat.format(calendar.total);
+  const total = formatNumber(calendar.total);
 
   const frame = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);

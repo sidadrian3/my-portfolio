@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { photos } from "app/lib/content/photos";
+import { PageHeader } from "app/components/PageHeader";
 
 export const metadata: Metadata = {
   title: "Photos",
@@ -10,10 +11,7 @@ export const metadata: Metadata = {
 export default function Photos() {
   return (
     <div className="flex w-full flex-col">
-      <header className="pt-8 pb-4 sm:pt-12">
-        <h1 className="text-[32px] font-[650] leading-[1.1] tracking-[-0.03em] text-ink">photos</h1>
-        <p className="mt-2 text-[15px] text-mute">bits of the last few years.</p>
-      </header>
+      <PageHeader title="photos">bits of the last few years.</PageHeader>
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
         {photos.map((photo) => (
           <figure key={photo.src}>

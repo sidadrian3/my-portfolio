@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { contacts } from "app/lib/content/contacts";
 import { CopyEmailButton } from "./CopyEmailButton";
+import { PageHeader } from "app/components/PageHeader";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -12,10 +13,7 @@ const linkClass = "text-[15px] text-ink";
 export default function Contact() {
   return (
     <div className="flex w-full flex-col">
-      <header className="pt-8 pb-4 sm:pt-12">
-        <h1 className="text-[32px] font-[650] leading-[1.1] tracking-[-0.03em] text-ink">contact</h1>
-        <p className="mt-2 text-[15px] text-mute">best way to reach me is email. i actually reply.</p>
-      </header>
+      <PageHeader title="contact">best way to reach me is email. i actually reply.</PageHeader>
       <ul className="ruled">
         {contacts.map(({ label, handle, href, copy }) => (
           <li key={label} className="grid grid-cols-[96px_1fr_auto] items-center">

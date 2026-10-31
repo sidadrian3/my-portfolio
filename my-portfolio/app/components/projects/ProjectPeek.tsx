@@ -10,6 +10,7 @@ import {
   useSpring,
 } from "framer-motion";
 import type { Project } from "app/lib/content/projects";
+import { clamp } from "app/lib/math";
 import { ProjectPoster } from "./ProjectPoster";
 
 const WIDTH = 220;
@@ -19,10 +20,6 @@ const ANCHOR_RISE = HEIGHT * 1.15;
 const SPRING = { stiffness: 300, damping: 30 };
 const ENTER = { duration: 0.15, ease: [0.23, 1, 0.32, 1] as const };
 const EXIT = { duration: 0.1, ease: [0.23, 1, 0.32, 1] as const };
-
-function clamp(value: number, min: number, max: number) {
-  return Math.min(Math.max(value, min), max);
-}
 
 // The anchor is the point the poster's bottom-centre sits on (translate -50% -115%).
 function anchorFromCursor(clientX: number, clientY: number) {

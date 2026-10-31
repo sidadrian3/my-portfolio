@@ -1,8 +1,7 @@
 import { socialLinks } from "app/config";
 import { getContributionCalendar } from "app/lib/github";
+import { formatNumber } from "app/lib/format";
 import { ContributionGrid } from "./ContributionGrid";
-
-const numberFormat = new Intl.NumberFormat("en-US");
 
 function GithubLink({ children }: { children: React.ReactNode }) {
   return (
@@ -32,7 +31,7 @@ export async function ContributionGraph({ login }: { login: string }) {
     <div>
       <ContributionGrid calendar={calendar} />
       <p className="mt-3 text-sm text-faint">
-        {numberFormat.format(calendar.total)} contributions in the last year ·{" "}
+        {formatNumber(calendar.total)} contributions in the last year ·{" "}
         <GithubLink>github ↗</GithubLink>
       </p>
     </div>

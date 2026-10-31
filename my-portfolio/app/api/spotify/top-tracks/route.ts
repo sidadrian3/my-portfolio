@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getTopTracks } from "../../../lib/spotify";
 
-export const revalidate = 3600; // Cache for 1 hour
-
 const TIME_RANGES = ["short_term", "medium_term", "long_term"];
 
 export async function GET(request: NextRequest) {

@@ -35,6 +35,8 @@ export function ProjectList({ projects }: { projects: Project[] }) {
 
   const onKeyDown = (event: React.KeyboardEvent) => {
     if (event.key !== "Escape" || !openSlug) return;
+    const slug = (event.target as Element).closest<HTMLElement>("li")?.dataset.slug;
+    if (slug !== openSlug) return;
     buttons.current.get(openSlug)?.focus();
     setOpenSlug(null);
   };
@@ -52,7 +54,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
           const drawerId = `${baseId}-${project.slug}-drawer`;
 
           return (
-            <li key={project.slug}>
+            <li key={project.slug} data-slug={project.slug}>
               <button
                 id={buttonId}
                 type="button"
@@ -87,6 +89,7 @@ export function ProjectList({ projects }: { projects: Project[] }) {
 
               <div
                 id={drawerId}
+                onPointerEnter={() => setHoverSlug(null)}
                 role="region"
                 aria-labelledby={buttonId}
                 inert={!isOpen}

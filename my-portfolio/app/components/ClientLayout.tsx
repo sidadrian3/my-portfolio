@@ -1,14 +1,15 @@
 "use client";
 
 import { Navbar } from "../components/nav";
-import Footer from "../components/footer";
 import { MotionConfig, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 
 export default function ClientLayout({
   children,
+  footer,
 }: {
   children: React.ReactNode;
+  footer: React.ReactNode;
 }) {
   const pathname = usePathname();
 
@@ -27,7 +28,7 @@ export default function ClientLayout({
           >
             {children}
           </motion.main>
-          <Footer />
+          {footer}
         </div>
       </div>
     </MotionConfig>

@@ -3,6 +3,7 @@ const token = (name) => `rgb(var(--${name}) / <alpha-value>)`;
 
 module.exports = {
   darkMode: "class",
+  future: { hoverOnlyWhenSupported: true },
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}", "./public/**/*.svg"],
   theme: {
     extend: {

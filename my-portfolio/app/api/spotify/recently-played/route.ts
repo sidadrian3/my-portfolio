@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getRecentlyPlayed, SpotifyScopeError } from "../../../lib/spotify";
 
-export const revalidate = 60;
-
 export async function GET(request: NextRequest) {
   const requested = parseInt(request.nextUrl.searchParams.get("limit") ?? "5", 10);
   const limit = Math.min(10, Math.max(1, Number.isNaN(requested) ? 5 : requested));

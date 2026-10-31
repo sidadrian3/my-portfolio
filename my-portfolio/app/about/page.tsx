@@ -4,6 +4,7 @@ import { Section } from "app/components/Section";
 import { education, experience, type TimelineEntry } from "app/lib/content/experience";
 import { hobbies } from "app/lib/content/hobbies";
 import { photos } from "app/lib/content/photos";
+import { PageHeader } from "app/components/PageHeader";
 
 export const metadata: Metadata = {
   title: "About",
@@ -44,10 +45,7 @@ function TimelineList({ entries }: { entries: TimelineEntry[] }) {
 export default function About() {
   return (
     <div className="flex w-full flex-col">
-      <header className="pt-8 pb-4 sm:pt-12">
-        <h1 className="text-[32px] font-[650] leading-[1.1] tracking-[-0.03em] text-ink">about</h1>
-        <p className="mt-2 text-[15px] text-mute">the longer version.</p>
-      </header>
+      <PageHeader title="about">the longer version.</PageHeader>
       <PhotoStack photos={photos} />
       <Section label="Experience">
         <TimelineList entries={experience} />

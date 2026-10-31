@@ -3,17 +3,19 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { FastAverageColor } from "fast-average-color";
+import type { NowPlayingData, SpotifyTrack } from "app/lib/spotify";
 import { useLampTint } from "./useLampTint";
 
-type Track = {
-  title: string;
-  artist: string;
-  album: string;
-  albumImageUrl: string;
-  songUrl: string;
-};
+async function sampleDominantColor(url: string): Promise<string> {
+  const result = await new FastAverageColor().getColorAsync(url, {
+    algorithm: "dominant",
+    crossOrigin: "anonymous",
+  });
+  return result.hex;
+}
 
-type NowPlaying = { isPlaying: boolean } & Partial<Track>;
+type Track = SpotifyTrack;
+type NowPlaying = NowPlayingData;
 
 type TabId = "recent" | "short_term" | "medium_term" | "long_term";
 
@@ -57,10 +59,9 @@ function useDominantColor(url: string | undefined): string | null {
   useEffect(() => {
     if (!url) return;
     let cancelled = false;
-    new FastAverageColor()
-      .getColorAsync(url, { algorithm: "dominant", crossOrigin: "anonymous" })
+    sampleDominantColor(url)
       .then((color) => {
-        if (!cancelled) setResult({ url, color: color.hex });
+        if (!cancelled) setResult({ url, color });
       })
       .catch(() => {});
     return () => {
@@ -122,7 +123,7 @@ function AlbumArt({ track, size }: { track: Track; size: 40 | 56 }) {
   );
 }
 
-function Header({ label, track, live }: { label: string; track: Track; live: boolean }) {
+function FeaturedTrack({ label, track, live }: { label: string; track: Track; live: boolean }) {
   return (
     <div>
       <p className="flex h-5 items-center gap-2 text-[13px] text-mute">
@@ -145,7 +146,7 @@ function Header({ label, track, live }: { label: string; track: Track; live: boo
   );
 }
 
-function HeaderSkeleton() {
+function FeaturedTrackSkeleton() {
   return (
     <div aria-hidden="true">
       <div className="h-5 w-24 rounded-[4px] bg-hi motion-safe:animate-pulse" />
@@ -168,9 +169,8 @@ function TrackRow({ track }: { track: Track }) {
   const sampleColor = () => {
     if (requested.current || !track.albumImageUrl) return;
     requested.current = true;
-    new FastAverageColor()
-      .getColorAsync(track.albumImageUrl, { algorithm: "dominant", crossOrigin: "anonymous" })
-      .then((result) => setColor(result.hex))
+    sampleDominantColor(track.albumImageUrl)
+      .then(setColor)
       .catch(() => {});
   };
 
@@ -262,13 +262,13 @@ export function OnRepeat() {
 
   const headerSettled = nowSettled && recentSettled && (recentOk || feeds.short_term !== undefined);
   let header: React.ReactNode = null;
-  if (nowTrack) header = <Header label="Now playing" track={nowTrack} live />;
-  else if (recentTracks?.[0]) header = <Header label="Last played" track={recentTracks[0]} live={false} />;
-  else if (topTracks?.[0]) header = <Header label="#1 this month" track={topTracks[0]} live={false} />;
+  if (nowTrack) header = <FeaturedTrack label="Now playing" track={nowTrack} live />;
+  else if (recentTracks?.[0]) header = <FeaturedTrack label="Last played" track={recentTracks[0]} live={false} />;
+  else if (topTracks?.[0]) header = <FeaturedTrack label="#1 this month" track={topTracks[0]} live={false} />;
 
   return (
     <div>
-      <div className="min-h-[84px]">{headerSettled ? header : <HeaderSkeleton />}</div>
+      <div className="min-h-[84px]">{headerSettled ? header : <FeaturedTrackSkeleton />}</div>
 
       <div
         role="group"

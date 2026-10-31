@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Roboto_Flex } from "next/font/google";
 import { metaData } from "./config";
 import ClientLayout from "./components/ClientLayout";
+import Footer from "./components/footer";
 import { ThemeProvider } from "./components/ThemeProvider";
 
 const robotoFlex = Roboto_Flex({
@@ -53,7 +54,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning className={robotoFlex.variable}>
       <body className="bg-bg text-ink font-sans antialiased">
         <ThemeProvider>
-          <ClientLayout>{children}</ClientLayout>
+          <ClientLayout footer={<Footer />}>{children}</ClientLayout>
         </ThemeProvider>
       </body>
     </html>

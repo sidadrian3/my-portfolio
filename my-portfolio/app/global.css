@@ -80,8 +80,8 @@ body::before {
 }
 
 ::selection {
-  background-color: rgb(var(--ink));
-  color: rgb(var(--bg));
+  background-color: rgb(var(--ink) / 0.25);
+  color: rgb(var(--ink));
 }
 
 :focus-visible {

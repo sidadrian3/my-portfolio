@@ -15,7 +15,7 @@ const SLOTS = [
 const FLIP_SPRING = { type: "spring", duration: 0.5, bounce: 0.15 } as const;
 const CYCLE_SPRING = { type: "spring", duration: 0.45, bounce: 0.1 } as const;
 
-// Hover/keyboard focus flips to the caption, a tap flips on touch; a click, Enter or Space (second tap on touch) shows the next photo.
+// Hover or focus flips to the caption; click, Enter or Space advances.
 export function PhotoStack({ photos }: { photos: Photo[] }) {
   const stack = photos.slice(0, STACK_SIZE);
   const [top, setTop] = useState(0);

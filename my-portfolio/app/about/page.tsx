@@ -1,6 +1,8 @@
 import React from "react";
 import { Timeline } from "../components/Timeline";
-import { Projects as ProjectsComponent } from "../components/Projects";
+import { Section } from "../components/Section";
+import { ProjectList } from "../components/projects/ProjectList";
+import { projects } from "app/lib/content/projects";
 import { ImageGrid } from "app/components/image-grid";
 
 export const metadata = {
@@ -33,10 +35,9 @@ export default function About() {
         <Timeline />
       </div>
 
-      <div>
-        {/* Projects Section */}
-        <ProjectsComponent />
-      </div>
+      <Section label="Projects">
+        <ProjectList projects={projects} />
+      </Section>
     </section>
   );
 }

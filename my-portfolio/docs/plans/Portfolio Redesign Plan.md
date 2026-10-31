@@ -228,18 +228,18 @@
 - Create: `app/components/Hero.tsx`
 - Modify: `app/about/page.tsx` (remove the temporary Projects and Shipping sections from Tasks 3 and 5)
 
-**Reuses:** `Section`, `ProjectList` + `projects`, `ContributionGraph`, `OnRepeat`, `metaData.now`, `react-type-animation`.
+**Reuses:** `Section`, `ProjectList` + `projects`, `ContributionGraph`, `OnRepeat`, `metaData.now`.
 
 **Interfaces:**
-- `Hero()` (`"use client"`):
+- `Hero()` (server component, no hooks):
   - 56px avatar `next/image` from `/myprofile.jpg` (not `unoptimized`, `priority`).
-  - `<h1>` containing `<span className="sr-only">hey, i'm sid.</span>` plus an `aria-hidden` `TypeAnimation` (`sequence={["hey, i'm sid."]}`, `speed={70}` ≈ 50ms/char, `repeat={0}`, cursor hidden after 3 blinks via a class swap). Reduced motion renders the static string.
+  - `<h1>` with the full text "hey, i'm sid." in the DOM from first paint. The typing is **CSS only**: a `.type-once` class reveals the text with `clip-path: inset(0 100% 0 0)` → `inset(0 0 0 0)` over ~650ms using `steps(13, end)`, plus a `::after` cursor that blinks 3 times and then disappears (`animation-fill-mode: forwards`). Both are inside `@media (prefers-reduced-motion: no-preference)`; with reduced motion the text is simply shown, no cursor. No `react-type-animation`, no JS, no hydration risk. (Changed from the original plan's `TypeAnimation`: it renders empty on the server and needs extra code to avoid a flash and a reduced-motion mismatch.)
   - Size `text-[36px] sm:text-[46px]`, weight 650, `tracking-[-0.035em]`, one line ≥ 360px.
   - Bio paragraph (`text-mute`, 16px, `max-w-[540px]`), copy from the spec.
 - `app/page.tsx` order: `Hero` → `<Section label="Now">` with `metaData.now` as plain text → `<Section label="Projects" id="projects"><ProjectList projects={projects} /></Section>` → `<Section label="Shipping"><Suspense …><ContributionGraph login="sidadrian3" /></Suspense></Section>` → `<Section label="On repeat"><OnRepeat /></Section>`. No `"use client"`, no framer-motion import.
 - Section fade-up: one small client wrapper is **not** added; instead `global.css` gets `@supports (animation-timeline: view())` scroll-driven `opacity`/8px `translateY` reveal on `section` elements, disabled under reduced motion. (Keeps Home a pure server component.)
 
-- [ ] **Step 1:** Create `Hero.tsx`.
+- [ ] **Step 1:** Create `Hero.tsx` and the `.type-once` CSS.
 - [ ] **Step 2:** Rewrite `app/page.tsx`; move Projects and Shipping off `/about`; add the CSS scroll reveal.
 - [ ] **Step 3:** Verify: typecheck and build pass; the build output lists `/` as static or ISR, not dynamic-only. At 1440×900, the hero, Now and the first project row are above the fold; at 390×844, the hero and Now are above the fold. Screen reader text of the h1 is "hey, i'm sid." from first paint.
 - [ ] **Step 4:** Commit: `feat(home): assemble hero, now, projects, shipping and on repeat`

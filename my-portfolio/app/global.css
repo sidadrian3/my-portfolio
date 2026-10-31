@@ -101,6 +101,78 @@ body::before {
   }
 }
 
+/* Ruled list: hairline-separated rows; siblings dim while one row is hovered or focused */
+.ruled > * {
+  border-top: 1px solid rgb(var(--line));
+}
+
+.ruled > *:last-child {
+  border-bottom: 1px solid rgb(var(--line));
+}
+
+.ruled-arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.ruled > *:focus-within .ruled-arrow {
+  opacity: 1;
+  transform: none;
+}
+
+.ruled:has(:focus-visible) > * {
+  opacity: 0.45;
+  transition: opacity 150ms ease;
+}
+
+.ruled:has(:focus-visible) > *:has(:focus-visible) {
+  opacity: 1;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ruled > * {
+    transition: opacity 150ms ease;
+  }
+
+  .ruled:hover > * {
+    opacity: 0.45;
+  }
+
+  .ruled:hover > *:hover {
+    opacity: 1;
+  }
+
+  .ruled > *:hover .ruled-arrow {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.press {
+  transition: transform 160ms ease-out;
+}
+
+.press:active {
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ruled-arrow,
+  .ruled > *:focus-within .ruled-arrow,
+  .ruled > *:hover .ruled-arrow {
+    transform: none;
+  }
+
+  .press,
+  .press:active {
+    transition: none;
+    transform: none;
+  }
+}
+
 /* Legacy surfaces, replaced as the redesign tasks land */
 .glass-card {
   @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-[14px];

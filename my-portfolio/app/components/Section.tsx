@@ -10,11 +10,13 @@ export function Section({
   id,
   children,
   className = "",
+  stacked = false,
 }: {
   label: string;
   id?: string;
   children: React.ReactNode;
   className?: string;
+  stacked?: boolean;
 }) {
   const headingId = `${slugify(label)}-heading`;
 
@@ -22,11 +24,13 @@ export function Section({
     <section
       id={id}
       aria-labelledby={headingId}
-      className={`scroll-mt-20 py-6 sm:py-8 sm:grid sm:grid-cols-[120px_minmax(0,1fr)] gap-x-5 ${className}`}
+      className={`scroll-mt-20 py-6 sm:py-8 ${
+        stacked ? "" : "sm:grid sm:grid-cols-[120px_minmax(0,1fr)] gap-x-5"
+      } ${className}`}
     >
       <h2
         id={headingId}
-        className="mb-4 text-[15px] font-semibold text-ink sm:mb-0"
+        className={`mb-4 text-[15px] font-semibold text-ink ${stacked ? "" : "sm:mb-0"}`}
       >
         {label}
       </h2>

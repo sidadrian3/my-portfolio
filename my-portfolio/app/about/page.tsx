@@ -1,9 +1,10 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Timeline } from "../components/Timeline";
 import { Section } from "../components/Section";
 import { ProjectList } from "../components/projects/ProjectList";
 import { projects } from "app/lib/content/projects";
 import { ImageGrid } from "app/components/image-grid";
+import { ContributionGraph, ContributionGraphSkeleton } from "../components/ContributionGraph";
 
 export const metadata = {
   title: "About | Portfolio",
@@ -37,6 +38,12 @@ export default function About() {
 
       <Section label="Projects">
         <ProjectList projects={projects} />
+      </Section>
+
+      <Section label="Shipping">
+        <Suspense fallback={<ContributionGraphSkeleton />}>
+          <ContributionGraph login="sidadrian3" />
+        </Suspense>
       </Section>
     </section>
   );

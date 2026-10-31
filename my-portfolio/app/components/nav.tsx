@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useRef, useState } from "react";
+import { ThemeToggle } from "./ThemeToggle";
 
 const navItems = [
   { href: "/", name: "Home" },
@@ -80,7 +81,7 @@ export function Navbar() {
               }}
             />
           </div>
-          {/* Task 9: theme toggle slot */}
+          <ThemeToggle />
         </div>
       </div>
     </nav>

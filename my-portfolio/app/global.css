@@ -19,8 +19,8 @@
   --accent-now: 123 191 138;
   --grain-opacity: 0.07;
   --grain-blend: screen;
-
-  --apple-shadow-md: 0 4px 24px rgba(0, 0, 0, 0.5), 0 0 0 0.5px rgba(255, 255, 255, 0.06);
+  --lamp-base: rgb(245 240 232);
+  --lamp-highlight: transparent;
 }
 
 .light {
@@ -39,6 +39,9 @@
   --accent-now: 58 110 72;
   --grain-opacity: 0.09;
   --grain-blend: multiply;
+  /* Light: no tint by default, just a soft lighter-than-paper highlight */
+  --lamp-base: transparent;
+  --lamp-highlight: rgb(255 255 255 / 0.55);
 }
 
 /* Typed so the lamp tint can transition; set on the lamp element only */
@@ -92,12 +95,14 @@ body::before {
   height: 60vh;
   z-index: -1;
   pointer-events: none;
-  --lamp: rgb(var(--ink));
-  background: radial-gradient(
-    ellipse 70% 100% at 50% 0%,
-    color-mix(in srgb, var(--lamp) 14%, transparent),
-    transparent 70%
-  );
+  --lamp: var(--lamp-base);
+  background:
+    radial-gradient(
+      ellipse 70% 100% at 50% 0%,
+      color-mix(in srgb, var(--lamp) 14%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(ellipse 70% 100% at 50% 0%, var(--lamp-highlight), transparent 70%);
   transition: --lamp 800ms ease;
 }
 
@@ -306,45 +311,4 @@ body::before {
       transform: scale(1);
     }
   }
-}
-
-/* Legacy surfaces, replaced as the redesign tasks land */
-.glass-card {
-  @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-[14px];
-}
-
-.glass-panel {
-  @apply bg-black/70 backdrop-blur-[20px] border-b border-white/[0.06];
-}
-
-.apple-shadow {
-  box-shadow: var(--apple-shadow-md);
-}
-
-pre::-webkit-scrollbar {
-  display: none;
-}
-
-pre {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-}
-
-/* Remove Safari input shadow on mobile */
-input[type="text"],
-input[type="email"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-}
-
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-
-.title {
-  text-wrap: balance;
 }

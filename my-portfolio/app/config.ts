@@ -4,7 +4,7 @@ export const metaData = {
   name: "Sid",
   description:
     "cs grad from ateneo de davao building back-ends. projects, experience, and what i'm listening to.",
-  ogImage: "/opengraph-image.png",
+  ogImage: "/og",
   now: "starting BANSAG with my friends from school",
 };
 

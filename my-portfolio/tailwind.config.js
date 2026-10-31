@@ -22,25 +22,8 @@ module.exports = {
           4: token("contrib-4"),
         },
       },
-      animation: {
-        "fade-in": "fade-in 0.5s ease-out forwards",
-      },
-      keyframes: {
-        "fade-in": {
-          "0%": { opacity: "0" },
-          "100%": { opacity: "1" },
-        },
-      },
       fontFamily: {
         sans: ["var(--font-roboto-flex)", "system-ui", "sans-serif"],
-      },
-      typography: {
-        quoteless: {
-          css: {
-            "blockquote p:first-of-type::before": { content: "none" },
-            "blockquote p:first-of-type::after": { content: "none" },
-          },
-        },
       },
     },
   },

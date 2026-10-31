@@ -18,7 +18,7 @@ const links: { label: string; href: string; icon: IconType; external: boolean }[
 
 export default function Footer() {
   return (
-    <footer className="mt-8 flex items-center justify-between gap-4 border-t border-line py-4">
+    <footer className="mt-8 flex items-center justify-between gap-4 py-4">
       <p className="text-sm text-mute">Sid Adrian B. Digamon</p>
       <ul className="-mr-2.5 flex items-center">
         {links.map(({ label, href, icon: Icon, external }) => (

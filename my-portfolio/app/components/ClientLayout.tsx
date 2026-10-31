@@ -23,7 +23,7 @@ export default function ClientLayout({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="mt-8 mb-12 flex flex-grow flex-col gap-16"
+            className="mt-6 mb-6 flex flex-grow flex-col gap-16"
           >
             {children}
           </motion.main>

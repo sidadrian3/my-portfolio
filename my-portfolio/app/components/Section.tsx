@@ -22,7 +22,7 @@ export function Section({
     <section
       id={id}
       aria-labelledby={headingId}
-      className={`scroll-mt-20 border-t border-line py-12 sm:py-16 sm:grid sm:grid-cols-[120px_minmax(0,1fr)] gap-x-5 ${className}`}
+      className={`scroll-mt-20 py-6 sm:py-8 sm:grid sm:grid-cols-[120px_minmax(0,1fr)] gap-x-5 ${className}`}
     >
       <h2
         id={headingId}

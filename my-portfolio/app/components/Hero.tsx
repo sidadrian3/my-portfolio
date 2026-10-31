@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function Hero() {
   return (
-    <header className="pt-12 pb-10 sm:pt-16">
+    <header className="pt-8 pb-4 sm:pt-12">
       <Image
         src="/myprofile.jpg"
         alt="Sid Adrian Digamon"

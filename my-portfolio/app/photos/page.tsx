@@ -1,45 +1,35 @@
-import React from "react";
 import type { Metadata } from "next";
-import { ImageGrid } from "app/components/image-grid";
+import Image from "next/image";
+import { photos } from "app/lib/content/photos";
 
 export const metadata: Metadata = {
   title: "Photos",
-  description: "My Photos",
+  description: "bits of the last few years.",
 };
 
 export default function Photos() {
   return (
-    <section className="">
-      <h1 className="mb-8 text-2xl font-medium">Photos</h1>
-      <ImageGrid
-  columns={3}
-  images={[
-    { src: "/photos/photo1.jpg", alt: "Roman columns" },
-    { src: "/photos/photo2.jpg", alt: "Big Ben" },
-    { src: "/photos/photo3.jpg", alt: "Sacré-Cœur Basilica" },
-    { src: "/photos/photo4.jpg", alt: "Eiffel Tower" },
-  ]}
-/>
-
-<ImageGrid
-  columns={2}
-  images={[
-    { src: "/photos/photo1.jpg", alt: "Roman columns" },
-    { src: "/photos/photo2.jpg", alt: "Big Ben" },
-    { src: "/photos/photo3.jpg", alt: "Sacré-Cœur Basilica" },
-    { src: "/photos/photo4.jpg", alt: "Eiffel Tower" },
-  ]}
-/>
-
-<ImageGrid
-  columns={4}
-  images={[
-    { src: "/photos/photo1.jpg", alt: "Roman columns" },
-    { src: "/photos/photo2.jpg", alt: "Big Ben" },
-    { src: "/photos/photo3.jpg", alt: "Sacré-Cœur Basilica" },
-    { src: "/photos/photo4.jpg", alt: "Eiffel Tower" },
-  ]}
-/>
-    </section>
+    <div className="flex w-full flex-col">
+      <header className="pt-8 pb-4 sm:pt-12">
+        <h1 className="text-[32px] font-[650] leading-[1.1] tracking-[-0.03em] text-ink">photos</h1>
+        <p className="mt-2 text-[15px] text-mute">bits of the last few years.</p>
+      </header>
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
+        {photos.map((photo) => (
+          <figure key={photo.src}>
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              width={600}
+              height={600}
+              priority
+              sizes="(min-width: 640px) 33vw, 50vw"
+              className="aspect-square w-full rounded-[4px] object-cover"
+            />
+            <figcaption className="mt-2 text-sm text-faint">{photo.caption}</figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
   );
 }

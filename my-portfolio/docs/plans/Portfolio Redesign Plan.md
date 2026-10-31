@@ -355,3 +355,30 @@ Capture Playwright screenshots of `/` at 1440×900 (fold and full page) and 390�
   - Copy: Tasks 3 and 6–8 use it verbatim
 - **Change from the 10-step outline agreed earlier.** The "content files" step is folded into the tasks that use each file (3, 7, 8), so a content file never lands without its consumer. That makes 9 tasks, with the checkpoint after the home page (now Task 6).
 - **Task 5 mounting.** The graph is an async server component and `page.tsx` is still a client component until Task 6, so Task 5 mounts it temporarily on `/about` and Task 6 moves it.
+
+## Outcome
+
+**Pipeline outcome:** agentic
+**Lane:** full
+**What was built:** A redesign of the whole portfolio on the phillipche.com structure with the original black and warm off-white palette: a narrow left-aligned column with label-column sections and ruled lists, a token-based dark/light theme with a toggle, a project list with a cursor-following peek and a touch/keyboard drawer, an "On repeat" Spotify section (now playing, recently played, top tracks, album-tinted page glow), an interactive GitHub contribution graph, and rebuilt About, Photos, Contact, 404 and error pages. The config, share image and sitemap were fixed and the dead blog/feed code was removed.
+
+**Decisions made:**
+- Dark first, light second: tokens are RGB channels with dark values in `:root` and light in `.light`, so first paint and no-JS render are dark; the light theme switched on only in the last task so no step shipped a half-themed site.
+- Hero typing is CSS-only (clip-path reveal + cursor), replacing `react-type-animation`: the library renders empty on the server and needed extra code to avoid a flash and a reduced-motion hydration mismatch.
+- Section divider lines were removed and spacing tightened at the user's request; the thin lines between list rows stay.
+- The contribution graph is full width (`Section stacked`) with a wave-in on first view, a hover lens that pushes neighbours apart (computed from the magnified sizes so cells cannot overlap), a custom tooltip, and one tab stop with arrow-key navigation. It is a server fetch plus one client island.
+- Private contributions show on the graph because the owner enabled GitHub's "Private contributions" setting (public 475 → 2,683). The site uses a no-scope token and never reads private repos.
+- Reduced motion is handled by `MotionConfig reducedMotion="user"` plus CSS media queries; hover-only Tailwind utilities are gated by `future.hoverOnlyWhenSupported`.
+- The `/og` route is the share image (black/cream, bold title) with a short timeout on its font fetch and a length cap on the title; `config.ts` pointed at a missing `opengraph-image.png` before.
+- Code review follow-up: shared `PageHeader`, `clamp`, `formatNumber` and a single album-colour sampler; real upstream caching for Spotify top tracks and recently played (the old `revalidate` exports had no effect on dynamic routes); Footer stays a server component; peek and Escape edge cases fixed.
+- Declined review points: photos keep `priority` on all four images (all above the fold on phones); body line-height stays at Tailwind's 1.5 rather than 1.6 so spacing stays as tightened; the scroll-linked section reveal stays because Task 6 documents it.
+
+**Verification:** UI verified: `/ /about /photos /contact` and the 404 page × 390 and 1440 widths × dark and light themes: correct status, theme class, no horizontal scroll, no console errors or hydration warnings (the 404 page logs the browser's own 404 status line), programmatic text contrast ≥ 4.5:1 on every route (lowest: `faint`, 5.11 dark / 5.02 light); first paint dark with no light flash and light persisted across reload on a production build; 17 browser checks on the graph (wave order, tooltip text against GitHub's data, lens, keyboard, reduced motion, touch); project peek, drawer, keyboard and touch paths; copy-email with and without the Clipboard API. `npm run typecheck` and `npm run build` pass; `/` is static with hourly revalidation. Two-axis code review ran (Standards and Spec), with fixes in `e3608f1`. Escalations: none. The `review-animations` skill is not installed in this repo, so motion was checked by the behaviour tests above and the Spec axis of the review.
+
+**Notes:**
+- Placeholders still live in content: `[role]` for BANSAG and `[end]` for both education entries (About), the `[event] · [place] · [date]` photo captions, and no project screenshots (posters stand in). Edit `app/lib/content/*` and `app/config.ts` (`now`).
+- Two setup steps are the owner's: add `GITHUB_TOKEN` and re-authorize Spotify with `user-read-recently-played` (then update `SPOTIFY_REFRESH_TOKEN`) in `.env.local` and on Vercel, then redeploy. Until the Spotify token is regenerated the section shows "#1 this month" and hides the Recently played tab.
+- The "spotify's taking a break." fallback has no link because no Spotify profile URL exists in the repo; add one to `socialLinks` to link it.
+- `npm run build` while `npm run dev` is running breaks the dev server (shared `.next`); stop dev, clear `.next`, and restart after any build.
+- Unused packages (`react-type-animation`, `next-mdx-remote`, `katex`, `react-tweet`, `feed`, `@tailwindcss/typography`, etc.) remain in `package.json`; pruning needs both lockfiles updated and is a separate task.
+- A future, bigger step was left out on purpose: a "replay the year" animation for the graph.

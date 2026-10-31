@@ -11,7 +11,7 @@ export default function Page() {
   return (
     <div className="flex flex-col w-full h-full">
       {/* Cinematic Hero Section */}
-      <section className="relative flex flex-col items-center justify-center min-h-[70vh] pt-10 pb-20">
+      <section className="relative flex flex-col items-center justify-center min-h-[70vh] pt-10">
         <motion.div
           initial={{ opacity: 0, scale: 0.95, filter: "blur(10px)" }}
           animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}

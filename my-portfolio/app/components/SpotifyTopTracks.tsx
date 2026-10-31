@@ -99,7 +99,7 @@ export function SpotifyTopTracks() {
 
   return (
     <div className="w-full mt-4">
-      <div className="flex items-center justify-between mb-4 mt-12">
+      <div className="flex items-center justify-between mb-4 mt-8">
         <h2 className="text-[10px] uppercase tracking-[0.15em] text-white/40">Top Tracks</h2>
         <div className="flex gap-1 bg-white/[0.04] backdrop-blur-md p-1 rounded-[10px] border border-white/[0.08]">
           {[

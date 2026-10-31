@@ -173,6 +173,93 @@ body::before {
   }
 }
 
+/* Hero typing: text is in the DOM from first paint; clip-path reveals it, a cursor rides the edge, blinks 3 times and goes */
+.type-once {
+  position: relative;
+  display: inline-block;
+}
+
+.type-once::after {
+  content: "";
+  display: none;
+  position: absolute;
+  inset: 0 -7px 0 0;
+  background: linear-gradient(rgb(var(--ink)), rgb(var(--ink))) right center / 3px 0.85em no-repeat;
+}
+
+.type-once-text {
+  display: inline-block;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .type-once::after {
+    display: block;
+    animation:
+      cursor-move 650ms steps(13, end) 200ms both,
+      cursor-blink 1s steps(1) 200ms 3 forwards;
+  }
+
+  .type-once-text {
+    animation: type-reveal 650ms steps(13, end) 200ms both;
+  }
+
+  /* vertical slack keeps descenders from being clipped */
+  @keyframes type-reveal {
+    from {
+      clip-path: inset(-0.3em 100% -0.3em 0);
+    }
+
+    to {
+      clip-path: inset(-0.3em 0 -0.3em 0);
+    }
+  }
+
+  @keyframes cursor-move {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes cursor-blink {
+    0%,
+    49.9% {
+      opacity: 1;
+    }
+
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
+}
+
+/* Scroll-driven section reveal; keeps Home a pure server component */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    section {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+
+    @keyframes reveal-up {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+}
+
 /* Legacy surfaces, replaced as the redesign tasks land */
 .glass-card {
   @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-[14px];

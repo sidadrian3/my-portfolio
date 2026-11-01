@@ -10,14 +10,14 @@ export const metadata = {
 
 export default function About() {
   return (
-    <section className="bg-black rounded-md p-4 sm:p-8 flex flex-col h-full gap-8">
-      <div>
-        <h3 className="mb-8 text-5xl font-extrabold">About Me</h3>
-        <p className="text-neutral-400 text-xl leading-relaxed mb-2">
+    <section className="flex flex-col h-full gap-16">
+      <div className="pt-8">
+        <h3 className="mb-6 text-5xl font-thin tracking-tight text-white">About Me</h3>
+        <p className="text-white/60 text-lg leading-loose max-w-2xl">
           An aspiring developer always eager to learn and build things that matter.
           This is all about me.
         </p>
-        <div className="p-4">
+        <div className="py-8">
           <ImageGrid
             columns={3}
             images={[

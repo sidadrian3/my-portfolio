@@ -42,3 +42,6 @@ next-env.d.ts
 # agent skills / config (local tooling, not project code)
 /.agents
 /.claude
+
+# brainstorming mockups
+.superpowers/

@@ -2,45 +2,53 @@
 @tailwind components;
 @tailwind utilities;
 
-::selection {
-  background-color: #47a3f3;
-  color: #fefefe;
-}
-
-/* Light theme colors */
+/* Dark is the default: values live in :root, light overrides in .light */
 :root {
-  --apple-accent: #F5F0E8;
-  --apple-glass: rgba(255, 255, 255, 0.04);
-  --apple-glass-border: rgba(255, 255, 255, 0.08);
-  --apple-blur: 20px;
-  --apple-shadow-sm: 0 1px 3px rgba(0,0,0,0.4), 0 0 0 0.5px rgba(255,255,255,0.04);
-  --apple-shadow-md: 0 4px 24px rgba(0,0,0,0.5), 0 0 0 0.5px rgba(255,255,255,0.06);
-  --apple-radius: 14px;
-  --apple-radius-lg: 20px;
-
-  --sh-class: #2d5e9d;
-  --sh-identifier: #354150;
-  --sh-sign: #8996a3;
-  --sh-string: #007f7a;
-  --sh-keyword: #e02518;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+  color-scheme: dark;
+  --bg: 0 0 0;
+  --ink: 245 240 232;
+  --mute: 162 158 153;
+  --faint: 127 125 121;
+  --line: 29 29 28;
+  --hi: 15 14 14;
+  --contrib-0: 27 27 26;
+  --contrib-1: 31 58 43;
+  --contrib-2: 46 90 63;
+  --contrib-3: 74 138 95;
+  --contrib-4: 123 191 138;
+  --accent-now: 123 191 138;
+  --grain-opacity: 0.07;
+  --grain-blend: screen;
+  --lamp-base: rgb(245 240 232);
+  --lamp-highlight: transparent;
 }
 
-/* Dark theme colors */
-.dark {
-  background-color: #121212;
-  --sh-class: #4c97f8;
-  --sh-identifier: white;
-  --sh-sign: #8996a3;
-  --sh-string: #0fa295;
-  --sh-keyword: #f47067;
-  --sh-comment: #a19595;
-  --sh-jsxliterals: #6266d1;
-  --sh-property: #e25a1c;
-  --sh-entity: #e25a1c;
+.light {
+  color-scheme: light;
+  --bg: 245 240 232;
+  --ink: 20 18 16;
+  --mute: 92 89 85;
+  --faint: 106 102 98;
+  --line: 218 213 206;
+  --hi: 234 229 221;
+  --contrib-0: 226 221 213;
+  --contrib-1: 201 220 200;
+  --contrib-2: 156 193 159;
+  --contrib-3: 95 154 108;
+  --contrib-4: 58 110 72;
+  --accent-now: 58 110 72;
+  --grain-opacity: 0.09;
+  --grain-blend: multiply;
+  /* Light: no tint by default, just a soft lighter-than-paper highlight */
+  --lamp-base: transparent;
+  --lamp-highlight: rgb(255 255 255 / 0.55);
+}
+
+/* Typed so the lamp tint can transition; set on the lamp element only */
+@property --lamp {
+  syntax: "<color>";
+  inherits: false;
+  initial-value: rgb(245 240 232);
 }
 
 html {
@@ -49,126 +57,258 @@ html {
   font-feature-settings: "cv02", "cv03", "cv04", "cv11";
 }
 
-.glass-card {
-  @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08] rounded-[14px];
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
 
-.glass-panel {
-  @apply bg-black/70 backdrop-blur-[20px] border-b border-white/[0.06];
+body {
+  min-height: 100vh;
 }
 
-.apple-shadow {
-  box-shadow: var(--apple-shadow-md);
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: var(--grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
 }
 
-.prose {
-  @apply text-[#070606] dark:text-[#FFFFFF];
+::selection {
+  background-color: rgb(var(--ink) / 0.25);
+  color: rgb(var(--ink));
 }
 
-.prose .anchor {
-  @apply absolute invisible no-underline;
-  margin-left: -1em;
-  padding-right: 0.5em;
-  width: 80%;
-  max-width: 700px;
-  cursor: pointer;
+:focus-visible {
+  outline: 2px solid rgb(var(--ink));
+  outline-offset: 2px;
 }
 
-.anchor:hover {
-  @apply visible;
+.lamp {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: 60vh;
+  z-index: -1;
+  pointer-events: none;
+  --lamp: var(--lamp-base);
+  background:
+    radial-gradient(
+      ellipse 70% 100% at 50% 0%,
+      color-mix(in srgb, var(--lamp) 14%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(ellipse 70% 100% at 50% 0%, var(--lamp-highlight), transparent 70%);
+  transition: --lamp 800ms ease;
 }
 
-.prose a {
-  @apply transition-all decoration-neutral-400 dark:decoration-neutral-600 underline-offset-2 decoration-[0.1em] font-normal text-[#000000] dark:text-[#FFFFFF];
+@media (prefers-reduced-motion: reduce) {
+  .lamp {
+    transition: none;
+  }
 }
 
-.prose a:hover {
-  @apply dark:decoration-neutral-400 decoration-neutral-600;
+/* Ruled list: hairline-separated rows; siblings dim while one row is hovered or focused */
+.ruled > * {
+  border-top: 1px solid rgb(var(--line));
 }
 
-.prose .anchor:after {
-  @apply text-neutral-300 dark:text-neutral-700;
-  content: "#";
+.ruled > *:last-child {
+  border-bottom: 1px solid rgb(var(--line));
 }
 
-.prose *:hover > .anchor {
-  @apply visible;
+.ruled-arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.prose pre {
-  @apply bg-[#F7F7F7] dark:bg-[#181818] rounded-lg overflow-x-auto;
+.ruled > *:focus-within .ruled-arrow {
+  opacity: 1;
+  transform: none;
 }
 
-.prose code {
-  @apply px-1 py-0.5 rounded-lg;
+.ruled:has(:focus-visible) > * {
+  opacity: 0.45;
+  transition: opacity 150ms ease;
 }
 
-.prose pre code {
-  @apply p-0;
-  border: initial;
-  line-height: 1.5;
+.ruled:has(:focus-visible) > *:has(:focus-visible) {
+  opacity: 1;
 }
 
-.prose code span {
-  @apply font-medium;
+@media (hover: hover) and (pointer: fine) {
+  .ruled > * {
+    transition: opacity 150ms ease;
+  }
+
+  .ruled:hover > * {
+    opacity: 0.45;
+  }
+
+  .ruled:hover > *:hover {
+    opacity: 1;
+  }
+
+  .ruled > *:hover .ruled-arrow {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-.prose img {
-  /* Don't apply styles to next/image */
-  @apply m-0;
+.press {
+  transition: transform 160ms ease-out;
 }
 
-.prose h2,
-h3,
-h4,
-h5,
-h6 {
-  @apply font-medium !important;
+.press:active {
+  transform: scale(0.97);
 }
 
-.prose strong {
-  @apply font-medium;
+@media (prefers-reduced-motion: reduce) {
+  .ruled-arrow,
+  .ruled > *:focus-within .ruled-arrow,
+  .ruled > *:hover .ruled-arrow {
+    transform: none;
+  }
+
+  .press,
+  .press:active {
+    transition: none;
+    transform: none;
+  }
 }
 
-.prose > :first-child {
-  /* Override removing top margin, causing layout shift */
-  margin-top: 1.25em !important;
-  margin-bottom: 1.25em !important;
+/* Hero typing: text is in the DOM from first paint; clip-path reveals it, a cursor rides the edge, blinks 3 times and goes */
+.type-once {
+  position: relative;
+  display: inline-block;
 }
 
-pre::-webkit-scrollbar {
+.type-once::after {
+  content: "";
   display: none;
+  position: absolute;
+  inset: 0 -7px 0 0;
+  background: linear-gradient(rgb(var(--ink)), rgb(var(--ink))) right center / 3px 0.85em no-repeat;
 }
 
-pre {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+.type-once-text {
+  display: inline-block;
 }
 
-/* Remove Safari input shadow on mobile */
-input[type="text"],
-input[type="email"] {
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+@media (prefers-reduced-motion: no-preference) {
+  .type-once::after {
+    display: block;
+    animation:
+      cursor-move 650ms steps(13, end) 200ms both,
+      cursor-blink 1s steps(1) 200ms 3 forwards;
+  }
+
+  .type-once-text {
+    animation: type-reveal 650ms steps(13, end) 200ms both;
+  }
+
+  /* vertical slack keeps descenders from being clipped */
+  @keyframes type-reveal {
+    from {
+      clip-path: inset(-0.3em 100% -0.3em 0);
+    }
+
+    to {
+      clip-path: inset(-0.3em 0 -0.3em 0);
+    }
+  }
+
+  @keyframes cursor-move {
+    from {
+      transform: translateX(-100%);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes cursor-blink {
+    0%,
+    49.9% {
+      opacity: 1;
+    }
+
+    50%,
+    100% {
+      opacity: 0;
+    }
+  }
 }
 
-.prose .tweet a {
-  text-decoration: inherit;
-  font-weight: 500;
+/* Scroll-driven section reveal; keeps Home a pure server component */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    section {
+      animation: reveal-up linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+
+    @keyframes reveal-up {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
 }
 
-table {
-  display: block;
-  max-width: fit-content;
-  overflow-x: auto;
-  white-space: nowrap;
+/* Contribution graph: wave-in once on first view, hover lens, active outline */
+.contrib-cell {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
 }
 
-.prose .callout > p {
-  margin: 0 !important;
+.contrib-cell[data-active] {
+  stroke: rgb(var(--ink));
+  stroke-width: 1.2;
 }
 
-.title {
-  text-wrap: balance;
+@media (prefers-reduced-motion: no-preference) {
+  /* --lx/--ly/--ls are set per cell by ContributionGrid so magnified cells push neighbours apart */
+  .contrib-cell[data-lens] {
+    transform: translate(calc(var(--lx, 0) * 1px), calc(var(--ly, 0) * 1px)) scale(var(--ls, 1));
+  }
+
+  /* Hidden only while scripting can reveal them; backwards fill leaves transforms free for the lens */
+  @media (scripting: enabled) {
+    .contrib-grid[data-wave="idle"] .contrib-cell {
+      opacity: 0;
+    }
+
+    .contrib-grid[data-wave="play"] .contrib-cell {
+      animation: contrib-in 380ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+    }
+  }
+
+  @keyframes contrib-in {
+    from {
+      opacity: 0;
+      transform: scale(0.4);
+    }
+
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
 }

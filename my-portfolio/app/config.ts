@@ -1,15 +1,17 @@
 export const metaData = {
-  baseUrl: "https://www.facebook.com/adrian.digamon",
-  title: "' SID '",
+  baseUrl: "https://my-portfolio-sepia-zeta-23.vercel.app",
+  title: "Sid Adrian Digamon",
   name: "Sid",
-  ogImage: "/opengraph-image.png",
-  description: "A simple portfolio for mine.",
+  description:
+    "cs grad from ateneo de davao building back-ends. projects, experience, and what i'm listening to.",
+  ogImage: "/og",
+  now: "starting BANSAG with my friends from school",
 };
 
 export const socialLinks = {
-  twitter: "https://www.facebook.com/adrian.digamon",
-  github: "https://github.com/siddigamon",
-  instagram: "https://www.instagram.com/",
+  github: "https://github.com/sidadrian3",
   linkedin: "https://www.linkedin.com/in/sid-adrian-digamon-b885a3323/",
+  instagram: "https://www.instagram.com/sidadrian/",
+  facebook: "https://www.facebook.com/adrian.digamon",
   email: "sidadrian3@gmail.com",
 };

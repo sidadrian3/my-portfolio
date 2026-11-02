@@ -79,7 +79,7 @@ export function ComposeCard({ email, topics }: { email: string; topics: NoteTopi
     <div className="overflow-hidden rounded-2xl border border-line bg-hi">
       <div className="row-focus rise grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 border-b border-line px-[18px] py-1.5 [animation-delay:80ms] sm:grid-cols-[72px_minmax(0,1fr)_auto]">
         <span className={`${rowLabel} max-sm:col-span-full max-sm:pt-2`}>to</span>
-        <a href={`mailto:${email}`} className="min-w-0 break-all text-base font-[550] tracking-[-0.01em] text-ink">
+        <a href={`mailto:${email}`} className="flex min-h-11 min-w-0 items-center break-all text-base font-[550] tracking-[-0.01em] text-ink">
           {email}
         </a>
         <CopyEmailButton email={email} />

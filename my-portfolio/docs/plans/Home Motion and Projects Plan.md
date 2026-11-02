@@ -129,3 +129,29 @@
 - [ ] **Step 4:** Today ring: a stroke-only `<rect>` 2 units larger around the last cell, `accent-now`, pinging 2.4s (no-preference only; hidden otherwise).
 - [ ] **Step 5:** `npm run typecheck`. Browser `/` × 390 / 1440 × dark / light: each stat previews on hover and pins on click/tap; the four highlights match the numbers; Tab quickly through stats during the count-up → final values and highlight follow focus (Review Focus 5); theme toggle with a pin keeps it (Review Focus 3); moving into the graph clears the highlight and the lens/tooltip work; month labels line up with the tooltip dates; today pulses.
 - [ ] **Step 6:** Commit: `feat(home): stat highlights, month labels and today ring on the graph`
+
+## Outcome
+
+**Pipeline outcome:** agentic
+**Lane:** full
+**What was built:** The home page now lists Finance App, FitLevelUp and Apartment System (ADTO, Lyla's, PMS and the NDA poster code are gone). Now rises word by word out of masks, then its two highlighted phrases ink and underline, with an "updated nov 2026" stamp. Project rows draw in, carry each project's accent (index, live dot, wash, title), and scramble their title on mouse hover while the cursor peek stays. Shipping gains four numbers (contributions, day streak, longest streak, best day) that count up and, when hovered, focused or pinned, light up their days on the graph, plus month labels and a pulsing today ring.
+
+**Decisions made:**
+- Brand colour per project, shown only through the project's own accent, so the black and cream theme is unchanged.
+- FitLevelUp's light accent (`#5b6e00`) was 4.42:1 against its own wash, so the hovered title uses a text-only `--accent-text` (85% accent, 15% ink, 5.37:1). The index and dot keep the pure accent.
+- `nowUpdated` lives beside the Now sentence in `config.ts`; the sentence is a list of pieces with highlights marked.
+- Word masks, not measured line masks, for Now: works at every width, no client JavaScript.
+- Stats are toggle buttons: hover or keyboard focus previews, click or tap pins, a second tap or Escape in the panel unpins. Tap focus no longer sets the preview (it left the highlight stuck on touch).
+- A single `useRevealOnce` hook and a generic `RevealOnce` replace the per-component observers; About only changed its import.
+- Reduced motion shows the final state from first paint everywhere, so the spec line promising a stat fade was corrected rather than built.
+- Streak figures use GitHub's own day boundaries.
+- Review declined: reusing a date helper (none exists and the four formats differ), a `GraphHighlight` discriminated union, treating the highlight that stays after a second click as a bug while the pointer is still over the stat (that is the hover preview), and reverting `ContributionGrid` reflow-only lines. Accepted: the stat Escape handling moved to the panel.
+
+**Verification:** UI verified: `/` × 390 and 1440 × dark and light on a production build, 76 browser checks (Playwright against `next start` in a scratch copy): theme applied, Now settles with stamp and ink, three projects in order, entrance completes, hover wash and accent, scramble changes letters then settles (and settles if the pointer leaves mid-run), no scramble on keyboard focus, peek mounts, tap opens a drawer and keeps the wash, drawer links, four stats with real data (2,726 / 5 / 74 / 100), count-up, month labels, longest-streak pin lights exactly 74 cells, best day marks one cell, Escape and second tap unpin, today ring, tooltip still follows cells, no horizontal scroll, no console errors; reduced motion (Now final from first paint, final stat numbers, no scramble, no ping) and JavaScript off (nothing left hidden). `npm run typecheck` and `npm run build` pass. Two-axis review ran (Standards: no hard violations; Spec: three partial items fixed, one spec line corrected) · Escalations: none.
+
+**Notes:**
+- `app/global.css` is now about 870 lines (was about 530) and mixes tokens with feature CSS. The review judged it past the point where a split pays off; a follow-up could move `.contrib-*`, `.now-*`, `.pr-*` and `.ship-*` into imported partials. Not done here.
+- Not verified in a browser: toggling the theme live while a row is hovered or a stat is pinned (each theme was loaded fresh); tabbing quickly through the stats during the count-up; the no-`GITHUB_TOKEN` fallback (a token was set); title-on-wash contrast was computed, not measured on screen. `review-animations` is not installed in this repo.
+- finance-app's Live link redirects to its `/login` page, so visitors can reach its sign-up. The owner accepted that "for now".
+- Posters stand in for screenshots; set `image` on a project to switch it.
+- I ran `npm run build` once while the owner's dev server was on port 3000, which overwrote its `.next`. I was not allowed to stop that server, so it needs `rm -rf .next` and a restart (`npm run dev`). All later builds ran in a separate scratch copy.

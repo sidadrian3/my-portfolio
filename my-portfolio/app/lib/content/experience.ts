@@ -10,10 +10,9 @@ export type TimelineEntry = {
 export const experience: TimelineEntry[] = [
   {
     org: "BANSAG",
-    role: "[role]",
+    role: "Full-stack developer",
     start: "2026",
-    line: "a startup we're planning as a group of fresh grads, building systems for our community.",
-    current: true,
+    line: "a startup a few of us from school started, building systems for our community.",
   },
   {
     org: "SAMAHAN Systems and Development",

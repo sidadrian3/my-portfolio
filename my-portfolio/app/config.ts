@@ -5,7 +5,7 @@ export const metaData = {
   description:
     "cs grad from ateneo de davao building back-ends. projects, experience, and what i'm listening to.",
   ogImage: "/og",
-  now: "starting BANSAG with my friends from school",
+  now: "going back to the fundamentals and good practices, and building full-stack with AI in the loop.",
 };
 
 export const socialLinks = {

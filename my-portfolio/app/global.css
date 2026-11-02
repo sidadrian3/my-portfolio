@@ -184,6 +184,58 @@ body::before {
   }
 }
 
+/* Cover shelf: the cover lifts and glows in its own colour (--glow), a label names the track */
+.shelf-art {
+  transition:
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.shelf-label {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 150ms ease,
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.shelf-link:focus-visible .shelf-art {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 16px 32px -12px var(--glow, transparent);
+}
+
+.shelf-link:focus-visible .shelf-label {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shelf-link:hover .shelf-art {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 16px 32px -12px var(--glow, transparent);
+  }
+
+  .shelf-link:hover .shelf-label {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf-art,
+  .shelf-label {
+    transition: none;
+  }
+
+  .shelf-label,
+  .shelf-link:hover .shelf-art,
+  .shelf-link:hover .shelf-label,
+  .shelf-link:focus-visible .shelf-art,
+  .shelf-link:focus-visible .shelf-label {
+    transform: none;
+  }
+}
+
 /* Hero typing: text is in the DOM from first paint; clip-path reveals it, a cursor rides the edge, blinks 3 times and goes */
 .type-once {
   position: relative;
@@ -275,7 +327,36 @@ body::before {
 .contrib-cell {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition:
+    transform 150ms cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.contrib-cell[data-dim] {
+  opacity: 0.18;
+}
+
+.contrib-cell[data-lit],
+.contrib-cell[data-best] {
+  stroke: rgb(var(--ink));
+  stroke-width: 1;
+}
+
+.contrib-month {
+  font-size: 11px;
+  fill: rgb(var(--faint));
+}
+
+.contrib-today {
+  fill: none;
+  stroke: rgb(var(--accent-now));
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.contrib-today-ping {
+  display: none;
+  pointer-events: none;
 }
 
 .contrib-cell[data-active] {
@@ -283,7 +364,49 @@ body::before {
   stroke-width: 1.2;
 }
 
+/* Now line: each word sits in a mask so it can rise into place; highlights end inked and underlined */
+.now-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.now-hl {
+  color: rgb(var(--ink));
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 @media (prefers-reduced-motion: no-preference) {
+  .contrib-cell[data-best] {
+    transform: scale(1.8);
+    transition-duration: 200ms;
+  }
+
+  .contrib-today-ping {
+    display: block;
+    fill: none;
+    stroke: rgb(var(--accent-now));
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: contrib-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes contrib-ping {
+    from {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+
+    75%,
+    to {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+  }
+
   /* --lx/--ly/--ls are set per cell by ContributionGrid so magnified cells push neighbours apart */
   .contrib-cell[data-lens] {
     transform: translate(calc(var(--lx, 0) * 1px), calc(var(--ly, 0) * 1px)) scale(var(--ls, 1));
@@ -291,12 +414,41 @@ body::before {
 
   /* Hidden only while scripting can reveal them; backwards fill leaves transforms free for the lens */
   @media (scripting: enabled) {
-    .contrib-grid[data-wave="idle"] .contrib-cell {
+    .contrib-grid[data-wave="idle"] .contrib-cell,
+    .contrib-grid[data-wave="idle"] .contrib-month,
+    .contrib-grid[data-wave="idle"] .contrib-today {
       opacity: 0;
+    }
+
+    .contrib-grid[data-wave="idle"] .contrib-today-ping {
+      display: none;
+    }
+
+    .contrib-grid[data-wave="play"] .contrib-month,
+    .contrib-grid[data-wave="play"] .contrib-today {
+      animation: contrib-label-in 380ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
     }
 
     .contrib-grid[data-wave="play"] .contrib-cell {
       animation: contrib-in 380ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+    }
+  }
+
+  @media (scripting: enabled) {
+    [data-reveal="idle"] .ship-stat {
+      opacity: 0;
+    }
+
+    [data-reveal="play"] .ship-stat {
+      animation: ship-rise 560ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+      animation-delay: calc(var(--i) * 70ms);
+    }
+  }
+
+  @keyframes ship-rise {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
     }
   }
 
@@ -322,6 +474,65 @@ body::before {
     }
   }
 
+  /* Now line: words rise in a wave, then the highlights ink and underline, then the stamp fades in */
+  @media (scripting: enabled) {
+    [data-reveal="idle"] .now-word > span {
+      transform: translateY(105%);
+    }
+
+    [data-reveal="idle"] .now-stamp {
+      opacity: 0;
+    }
+
+    [data-reveal="idle"] .now-hl {
+      color: rgb(var(--mute));
+      background-size: 0% 1px;
+    }
+
+    [data-reveal="play"] .now-word > span {
+      animation: now-rise 700ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+      animation-delay: calc(100ms + var(--i) * 25ms);
+    }
+
+    [data-reveal="play"] .now-hl {
+      animation:
+        now-ink 500ms cubic-bezier(0.23, 1, 0.32, 1) var(--d) backwards,
+        now-underline 800ms cubic-bezier(0.23, 1, 0.32, 1) var(--d) backwards;
+    }
+
+    [data-reveal="play"] .now-stamp {
+      animation: now-fade 400ms cubic-bezier(0.23, 1, 0.32, 1) 900ms backwards;
+    }
+  }
+
+  @keyframes now-rise {
+    from {
+      transform: translateY(105%);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes now-ink {
+    from {
+      color: rgb(var(--mute));
+    }
+  }
+
+  @keyframes now-underline {
+    from {
+      background-size: 0% 1px;
+    }
+  }
+
+  @keyframes now-fade {
+    from {
+      opacity: 0;
+    }
+  }
+
   @keyframes tl-pop {
     from {
       opacity: 0;
@@ -341,6 +552,12 @@ body::before {
 
     to {
       transform: none;
+    }
+  }
+
+  @keyframes contrib-label-in {
+    from {
+      opacity: 0;
     }
   }
 
@@ -527,6 +744,187 @@ body::before {
 
     50% {
       opacity: 0.35;
+    }
+  }
+}
+
+/* Projects: per-row accent, wash, nudge, live dot and entrance */
+.pr-row {
+  --accent: var(--accent-dark);
+  --accent-text: var(--accent);
+  --wash: 13%;
+  position: relative;
+}
+
+.light .pr-row {
+  --accent: var(--accent-light);
+  /* Nudged toward ink so the lime title keeps 4.5:1 on its own wash */
+  --accent-text: color-mix(in srgb, var(--accent-light) 85%, rgb(var(--ink)));
+  --wash: 10%;
+}
+
+.ruled > .pr-row {
+  border-top: 0;
+}
+
+.pr-row::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: rgb(var(--line));
+  transform-origin: left;
+}
+
+.pr-row-button {
+  position: relative;
+  isolation: isolate;
+}
+
+.pr-row-button::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: color-mix(in srgb, var(--accent) var(--wash), transparent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pr-idx {
+  color: var(--accent);
+}
+
+.pr-mask {
+  overflow: hidden;
+}
+
+.pr-title {
+  transition: color 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pr-body {
+  transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.pr-live {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--accent);
+}
+
+.pr-row-button[aria-expanded="true"]::before,
+.pr-row-button:focus-visible::before {
+  transform: scaleX(1);
+  transition-duration: 240ms;
+}
+
+.pr-row-button[aria-expanded="true"] .pr-title,
+.pr-row-button:focus-visible .pr-title {
+  color: var(--accent-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .pr-row-button:hover::before {
+    transform: scaleX(1);
+    transition-duration: 240ms;
+  }
+
+  .pr-row-button:hover .pr-title {
+    color: var(--accent-text);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pr-row-button:focus-visible .pr-body {
+    transform: translateX(4px);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .pr-row-button:hover .pr-body {
+      transform: translateX(4px);
+    }
+  }
+
+  .pr-live {
+    animation: pr-ping 2.4s cubic-bezier(0.23, 1, 0.32, 1) infinite;
+  }
+
+  @keyframes pr-ping {
+    0% {
+      box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent);
+    }
+
+    70%,
+    100% {
+      box-shadow: 0 0 0 6px transparent;
+    }
+  }
+
+  @media (scripting: enabled) {
+    [data-reveal="idle"] .pr-row::before {
+      transform: scaleX(0);
+    }
+
+    [data-reveal="idle"] :is(.pr-title, .pr-summary) {
+      transform: translateY(105%);
+    }
+
+    [data-reveal="idle"] :is(.pr-idx, .pr-meta) {
+      opacity: 0;
+    }
+
+    [data-reveal="play"] .pr-row::before {
+      animation: pr-draw 600ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+      animation-delay: calc(var(--i) * 110ms);
+    }
+
+    [data-reveal="play"] .pr-title {
+      animation: now-rise 700ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+      animation-delay: calc(var(--i) * 110ms + 100ms);
+    }
+
+    [data-reveal="play"] .pr-summary {
+      animation: now-rise 700ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+      animation-delay: calc(var(--i) * 110ms + 170ms);
+    }
+
+    [data-reveal="play"] :is(.pr-idx, .pr-meta) {
+      animation: now-fade 500ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+      animation-delay: calc(var(--i) * 110ms + 350ms);
+    }
+  }
+
+  @keyframes pr-draw {
+    from {
+      transform: scaleX(0);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pr-row-button::before {
+    transform: none;
+    opacity: 0;
+    transition: opacity 150ms ease;
+  }
+
+  .pr-row-button[aria-expanded="true"]::before,
+  .pr-row-button:focus-visible::before {
+    opacity: 1;
+    transition-duration: 150ms;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .pr-row-button:hover::before {
+      opacity: 1;
+      transition-duration: 150ms;
     }
   }
 }

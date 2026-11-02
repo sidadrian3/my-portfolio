@@ -1,15 +1,26 @@
 "use client";
 
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import type { ContributionCalendar } from "app/lib/github";
 import { formatNumber } from "app/lib/format";
 import { clamp } from "app/lib/math";
+import type { RevealPhase } from "./useRevealOnce";
+import type { StatKey } from "./ShippingStats";
 
 const CELL = 10;
 const GAP = 3;
 const STEP = CELL + GAP;
 const DAYS_IN_WEEK = 7;
-const GRAPH_HEIGHT = DAYS_IN_WEEK * STEP - GAP;
+const MONTH_ROW = 14;
+// Room on the right so today's ring and its pulse are not clipped by the viewBox.
+const VIEW_PAD = 6;
+const GRAPH_HEIGHT = MONTH_ROW + DAYS_IN_WEEK * STEP - GAP;
 const LENS_RADIUS = 4;
 const LENS_SCALE = [1.7, 1.3, 1.1, 1, 1];
 const LENS_GAP = 1.6;
@@ -39,11 +50,41 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
   timeZone: "UTC",
 });
 
+export type GraphHighlight = {
+  kind: StatKey;
+  from?: string;
+  to?: string;
+  date?: string;
+};
+
 type Cell = { w: number; d: number };
-type WavePhase = "idle" | "play" | "done";
 type Tip = { x: number; y: number; count: string; date: string };
 
 const cellKey = (w: number, d: number) => `${w}:${d}`;
+
+const monthName = new Intl.DateTimeFormat("en-US", {
+  month: "short",
+  timeZone: "UTC",
+});
+
+const monthOf = (date: string) => date.slice(0, 7);
+
+function markOf(highlight: GraphHighlight | null, count: number, date: string) {
+  if (!highlight) return undefined;
+  switch (highlight.kind) {
+    case "total":
+      return count === 0 ? "dim" : undefined;
+    case "best":
+      return date === highlight.date ? "best" : "dim";
+    default:
+      return highlight.from &&
+        highlight.to &&
+        date >= highlight.from &&
+        date <= highlight.to
+        ? "lit"
+        : "dim";
+  }
+}
 
 function describeDay(count: number, date: string) {
   const noun = count === 1 ? "contribution" : "contributions";
@@ -53,10 +94,29 @@ function describeDay(count: number, date: string) {
   };
 }
 
-export function ContributionGrid({ calendar }: { calendar: ContributionCalendar }) {
+export function ContributionGrid({
+  calendar,
+  wave,
+  highlight,
+  onPointerEnterGraph,
+}: {
+  calendar: ContributionCalendar;
+  wave: RevealPhase;
+  highlight: GraphHighlight | null;
+  onPointerEnterGraph: () => void;
+}) {
   const { weeks } = calendar;
-  const width = weeks.length * STEP - GAP;
+  const width = weeks.length * STEP - GAP + VIEW_PAD;
   const total = formatNumber(calendar.total);
+  const monthLabels = weeks.flatMap((week, w) => {
+    if (w === 0 || w === weeks.length - 1) return [];
+    if (monthOf(week.days[0].date) === monthOf(weeks[w - 1].days[0].date))
+      return [];
+    const name = monthName
+      .format(new Date(`${week.days[0].date}T00:00:00Z`))
+      .toLowerCase();
+    return [{ w, name }];
+  });
 
   const frame = useRef<HTMLDivElement>(null);
   const svg = useRef<SVGSVGElement>(null);
@@ -64,30 +124,8 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
   const lensed = useRef<SVGRectElement[]>([]);
   const fromKeyboard = useRef(false);
 
-  const [wave, setWave] = useState<WavePhase>("idle");
   const [active, setActive] = useState<Cell | null>(null);
   const [tip, setTip] = useState<Tip | null>(null);
-
-  // Play the wave once, the first time the graph is mostly on screen.
-  useEffect(() => {
-    const element = frame.current;
-    if (!element) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce || !("IntersectionObserver" in window)) {
-      setWave("done");
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setWave("play");
-        observer.disconnect();
-      },
-      { threshold: 0.3 },
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
 
   // Touch has no hover, so a tap elsewhere is what dismisses the tooltip.
   useEffect(() => {
@@ -108,19 +146,29 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
     }
     lensed.current = [];
 
-    const target = active ? cells.current.get(cellKey(active.w, active.d)) : null;
+    const target = active
+      ? cells.current.get(cellKey(active.w, active.d))
+      : null;
     const frameElement = frame.current;
     const svgElement = svg.current;
     if (!active || !target || !frameElement || !svgElement) return;
 
     for (let dw = -LENS_RADIUS; dw <= LENS_RADIUS; dw++) {
       for (let dd = -LENS_RADIUS; dd <= LENS_RADIUS; dd++) {
-        const neighbour = cells.current.get(cellKey(active.w + dw, active.d + dd));
+        const neighbour = cells.current.get(
+          cellKey(active.w + dw, active.d + dd),
+        );
         if (!neighbour) continue;
         const ring = Math.max(Math.abs(dw), Math.abs(dd));
         neighbour.dataset.lens = String(ring);
-        neighbour.style.setProperty("--lx", String(Math.sign(dw) * LENS_PUSH[Math.abs(dw)]));
-        neighbour.style.setProperty("--ly", String(Math.sign(dd) * LENS_PUSH[Math.abs(dd)]));
+        neighbour.style.setProperty(
+          "--lx",
+          String(Math.sign(dw) * LENS_PUSH[Math.abs(dw)]),
+        );
+        neighbour.style.setProperty(
+          "--ly",
+          String(Math.sign(dd) * LENS_PUSH[Math.abs(dd)]),
+        );
         neighbour.style.setProperty("--ls", String(LENS_SCALE[ring]));
         lensed.current.push(neighbour);
       }
@@ -142,7 +190,7 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
         TOOLTIP_HALF_WIDTH,
         frameBox.width - TOOLTIP_HALF_WIDTH,
       ),
-      y: svgBox.top - frameBox.top + active.d * STEP * scale,
+      y: svgBox.top - frameBox.top + (MONTH_ROW + active.d * STEP) * scale,
       ...describeDay(day.count, day.date),
     });
   }, [active, weeks, width]);
@@ -154,8 +202,9 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
       const box = element.getBoundingClientRect();
       const scale = box.width / width;
       const w = Math.floor((clientX - box.left) / scale / STEP);
-      const d = Math.floor((clientY - box.top) / scale / STEP);
-      if (w < 0 || d < 0 || w >= weeks.length || d >= weeks[w].days.length) return null;
+      const d = Math.floor(((clientY - box.top) / scale - MONTH_ROW) / STEP);
+      if (w < 0 || d < 0 || w >= weeks.length || d >= weeks[w].days.length)
+        return null;
       return { w, d };
     },
     [weeks, width],
@@ -163,7 +212,9 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
 
   const select = useCallback((next: Cell | null) => {
     setActive((current) =>
-      current && next && current.w === next.w && current.d === next.d ? current : next,
+      current && next && current.w === next.w && current.d === next.d
+        ? current
+        : next,
     );
   }, []);
 
@@ -209,16 +260,21 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
         aria-label={`Contribution graph, ${total} contributions in the last year. Use the arrow keys to explore days.`}
         data-wave={wave}
         className="contrib-grid overflow-x-auto pb-1"
+        onPointerEnter={(event) => {
+          if (event.pointerType !== "touch") onPointerEnterGraph();
+        }}
         onPointerMove={(event) => select(cellAt(event.clientX, event.clientY))}
         onPointerDown={(event) => {
-          if (event.pointerType === "touch") select(cellAt(event.clientX, event.clientY));
+          if (event.pointerType === "touch")
+            select(cellAt(event.clientX, event.clientY));
         }}
         onPointerLeave={(event) => {
           if (event.pointerType !== "touch") select(null);
         }}
         onKeyDown={onKeyDown}
         onFocus={(event) => {
-          if (!active && event.currentTarget.matches(":focus-visible")) select(lastCell());
+          if (!active && event.currentTarget.matches(":focus-visible"))
+            select(lastCell());
         }}
         onBlur={() => select(null)}
       >
@@ -229,25 +285,46 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
             viewBox={`0 0 ${width} ${GRAPH_HEIGHT}`}
             className="block h-auto w-full"
           >
+            {monthLabels.map(({ w, name }) => (
+              <text
+                key={w}
+                className="contrib-month"
+                x={w * STEP}
+                y={10}
+                style={{ animationDelay: `${w * WAVE_STEP_MS}ms` }}
+              >
+                {name}
+              </text>
+            ))}
             {weeks.map((week, w) =>
-              week.days.map((day, d) => (
-                <rect
-                  key={day.date}
-                  ref={(node) => {
-                    if (node) cells.current.set(cellKey(w, d), node);
-                    else cells.current.delete(cellKey(w, d));
-                  }}
-                  className="contrib-cell"
-                  x={w * STEP}
-                  y={d * STEP}
-                  width={CELL}
-                  height={CELL}
-                  rx={2}
-                  fill={`rgb(var(--contrib-${day.level}))`}
-                  style={{ animationDelay: `${w * WAVE_STEP_MS}ms` }}
-                />
-              )),
+              week.days.map((day, d) => {
+                const mark = markOf(highlight, day.count, day.date);
+                return (
+                  <rect
+                    key={day.date}
+                    ref={(node) => {
+                      if (node) cells.current.set(cellKey(w, d), node);
+                      else cells.current.delete(cellKey(w, d));
+                    }}
+                    className="contrib-cell"
+                    data-dim={mark === "dim" ? "" : undefined}
+                    data-lit={mark === "lit" ? "" : undefined}
+                    data-best={mark === "best" ? "" : undefined}
+                    x={w * STEP}
+                    y={MONTH_ROW + d * STEP}
+                    width={CELL}
+                    height={CELL}
+                    rx={2}
+                    fill={`rgb(var(--contrib-${day.level}))`}
+                    style={{ animationDelay: `${w * WAVE_STEP_MS}ms` }}
+                  />
+                );
+              }),
             )}
+            <TodayRing
+              x={(weeks.length - 1) * STEP}
+              y={MONTH_ROW + (weeks[weeks.length - 1].days.length - 1) * STEP}
+            />
           </svg>
         </div>
       </div>
@@ -269,5 +346,22 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
         {active && tip ? `${tip.count}, ${tip.date}` : ""}
       </p>
     </div>
+  );
+}
+
+function TodayRing({ x, y }: { x: number; y: number }) {
+  const props = {
+    x: x - 1,
+    y: y - 1,
+    width: CELL + 2,
+    height: CELL + 2,
+    rx: 3,
+    fill: "none",
+  };
+  return (
+    <>
+      <rect className="contrib-today-ping" {...props} />
+      <rect className="contrib-today" {...props} />
+    </>
   );
 }

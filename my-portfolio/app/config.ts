@@ -1,3 +1,5 @@
+export type NowPiece = string | { highlight: string };
+
 export const metaData = {
   baseUrl: "https://my-portfolio-sepia-zeta-23.vercel.app",
   title: "Sid Adrian Digamon",
@@ -5,7 +7,14 @@ export const metaData = {
   description:
     "cs grad from ateneo de davao building back-ends. projects, experience, and what i'm listening to.",
   ogImage: "/og",
-  now: "going back to the fundamentals and good practices, and building full-stack with AI in the loop.",
+  now: [
+    "going back to the ",
+    { highlight: "fundamentals and good practices" },
+    ", and building ",
+    { highlight: "full-stack with AI in the loop" },
+    ".",
+  ] satisfies NowPiece[],
+  nowUpdated: "2026-11",
 };
 
 export const socialLinks = {

@@ -6,7 +6,7 @@ import { education, experience, type TimelineEntry } from "app/lib/content/exper
 import { hobbies } from "app/lib/content/hobbies";
 import { photos } from "app/lib/content/photos";
 import { PageHeader } from "app/components/PageHeader";
-import { TimelineReveal } from "app/components/TimelineReveal";
+import { RevealOnce } from "app/components/RevealOnce";
 
 export const metadata: Metadata = {
   title: "About",
@@ -20,7 +20,7 @@ function yearsLabel({ start, end, current }: TimelineEntry) {
 
 function TimelineRail({ entries }: { entries: TimelineEntry[] }) {
   return (
-    <TimelineReveal>
+    <RevealOnce>
       <ol>
         {entries.map((entry, index) => {
           const first = index === 0;
@@ -62,7 +62,7 @@ function TimelineRail({ entries }: { entries: TimelineEntry[] }) {
           );
         })}
       </ol>
-    </TimelineReveal>
+    </RevealOnce>
   );
 }
 

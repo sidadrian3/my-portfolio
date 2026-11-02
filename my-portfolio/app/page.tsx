@@ -8,22 +8,26 @@ import {
   ContributionGraph,
   ContributionGraphSkeleton,
 } from "./components/ContributionGraph";
-import { OnRepeat } from "./components/OnRepeat";
+import { OnRepeat } from "./components/on-repeat/OnRepeat";
+import { NowLine } from "./components/NowLine";
+import { RevealOnce } from "./components/RevealOnce";
 
 export default function Page() {
   return (
     <div className="flex w-full flex-col">
       <Hero />
 
-      <Section label="Now">
-        <p className="text-[15px] text-mute">{metaData.now}</p>
+      <Section label="Now" className="[animation:none]">
+        <RevealOnce>
+          <NowLine pieces={metaData.now} updated={metaData.nowUpdated} />
+        </RevealOnce>
       </Section>
 
-      <Section label="Projects" id="projects">
+      <Section label="Projects" id="projects" className="[animation:none]">
         <ProjectList projects={projects} />
       </Section>
 
-      <Section label="Shipping" stacked>
+      <Section label="Shipping" stacked className="[animation:none]">
         <Suspense fallback={<ContributionGraphSkeleton />}>
           <ContributionGraph login="sidadrian3" />
         </Suspense>

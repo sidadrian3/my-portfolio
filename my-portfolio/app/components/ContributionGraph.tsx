@@ -1,7 +1,8 @@
 import { socialLinks } from "app/config";
 import { getContributionCalendar } from "app/lib/github";
 import { formatNumber } from "app/lib/format";
-import { ContributionGrid } from "./ContributionGrid";
+import { summarizeCalendar } from "app/lib/contributions";
+import { ShippingPanel } from "./ShippingPanel";
 
 function GithubLink({ children }: { children: React.ReactNode }) {
   return (
@@ -29,7 +30,7 @@ export async function ContributionGraph({ login }: { login: string }) {
 
   return (
     <div>
-      <ContributionGrid calendar={calendar} />
+      <ShippingPanel calendar={calendar} summary={summarizeCalendar(calendar)} />
       <p className="mt-3 text-sm text-faint">
         {formatNumber(calendar.total)} contributions in the last year ·{" "}
         <GithubLink>github ↗</GithubLink>
@@ -41,8 +42,17 @@ export async function ContributionGraph({ login }: { login: string }) {
 export function ContributionGraphSkeleton() {
   return (
     <div aria-hidden>
+      <div className="mb-6 grid grid-cols-2 gap-5 sm:grid-cols-4">
+        {Array.from({ length: 4 }, (_, index) => (
+          <div key={index} className="py-1">
+            <span className="block text-[28px] leading-tight">&nbsp;</span>
+            <span className="block text-[13px]">&nbsp;</span>
+            <span className="block text-[13px]">&nbsp;</span>
+          </div>
+        ))}
+      </div>
       <div className="pb-1">
-        <div className="h-[74px] w-full bg-hi sm:aspect-[686/91] sm:h-auto" />
+        <div className="h-[82px] w-full bg-hi sm:aspect-[686/105] sm:h-auto" />
       </div>
       <p className="mt-3 text-sm">&nbsp;</p>
     </div>

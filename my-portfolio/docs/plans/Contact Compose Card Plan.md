@@ -187,3 +187,23 @@ git commit -m "feat(contact): rebuild contact as a compose card with topic subje
 git add app/global.css app/contact/ComposeCard.tsx app/contact/DavaoStatus.tsx app/contact/page.tsx
 git commit -m "feat(contact): add entrance stagger, typed subject, chip pop and send motion"
 ```
+
+## Outcome
+
+**Pipeline outcome:** agentic
+**Lane:** small-change
+**What was built:** `/contact` is now a "write me a note" compose card, direction B2 from the Claude Design canvas, with all nine approved additions: a to/copy row, topic chips, a typed subject, an optional message that goes into the mailto body, a send button with an arrow fly-through, a time-aware Davao status line, a staggered entrance, a row focus highlight and lifting social pills. The page stays a server component; `ComposeCard` and `DavaoStatus` are the only client components.
+**Decisions made:**
+- Subjects are finished text, not placeholders: `work opportunity`, `project idea, want to build something?`, `hi sid, found your site`. A bracketed `[ROLE]` would have reached the inbox unedited.
+- The subject is server-rendered in full and only types when the topic changes, so the first paint and no-JS visitors never see it blank.
+- The status line renders after mount. A server-rendered time would be frozen by static caching and cause a hydration mismatch.
+- The message is capped at 1000 characters with a counter above 900, because mail apps truncate long mailto links.
+- Chips are native radios, so arrow keys work and there is one tab stop. The group is `role="radiogroup"` with a label, not a `fieldset`, because `legend` does not lay out cleanly in a grid row.
+- Kept the send button's box-shadow halo from the approved mockup. It is a paint property, not layout, so it does not break the repo's motion rule, but it does go beyond the plan's "transform, opacity, filter" constraint.
+**Verification:** UI verified: `/contact` × 390 and 1440 × dark and light: no horizontal scroll, no console errors. Behaviour verified in the browser: default and per-topic mailto hrefs, body encoding of `a&b?c #1`, counter at 901 and the 1000 cap, copy to clipboard, arrow-key chip selection, typing with rapid topic switching, the arrow fly-through, the send label and its reset, row focus and pill lift. Also verified with JavaScript disabled (default mailto link intact) and with reduced motion emulated (no running animations, instant subject, one arrow). Contrast of `faint` on the card background is 4.69:1 dark and 4.54:1 light. `npm run typecheck` and `npm run build` pass. Two-axis code review ran: Standards found no hard violations; Spec found one gap (email link was about 24px tall), fixed in its own commit. Escalations: none.
+**Notes:**
+- `.rise` is not gated behind `@media (scripting: enabled)` as the plan said. CSS animations run without JavaScript, so nothing is ever left hidden.
+- `CopyEmailButton` stays at 40px tall; the plan said to reuse it unchanged. Raise it to 44px later if wanted.
+- `app/global.css` is now about 490 lines. It remains the single shared stylesheet, so it was not split.
+- Do not run `npm run build` while `npm run dev` is running: both write `.next`, and the dev server then serves mixed chunks and fails to hydrate.
+- Not built, from the design discussion: a gliding highlight between chips, a cursor-following glow on the card edge, a "sent" confirmation animation, and tinting the glow from Spotify album colour.

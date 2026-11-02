@@ -58,3 +58,44 @@ export function clampLampColor(hex: string): string {
 
   return `rgb(${r} ${g} ${b})`;
 }
+
+type Bucket = { r: number; g: number; b: number; n: number };
+
+// Two swatches closer than this (RGB distance) read as the same colour
+const MIN_SWATCH_DISTANCE = 56;
+
+function toHex(r: number, g: number, b: number): string {
+  return `#${[r, g, b].map((v) => Math.round(v).toString(16).padStart(2, "0")).join("")}`;
+}
+
+function distance(a: Bucket, b: Bucket): number {
+  return Math.hypot(a.r - b.r, a.g - b.g, a.b - b.b);
+}
+
+// Most common distinct colours in RGBA pixel data, most frequent first. May return fewer than `count`.
+export function extractPalette(pixels: Uint8ClampedArray, count: number): string[] {
+  const buckets = new Map<number, Bucket>();
+  for (let i = 0; i < pixels.length; i += 4) {
+    if (pixels[i + 3] < 128) continue;
+    const [r, g, b] = [pixels[i], pixels[i + 1], pixels[i + 2]];
+    const key = ((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4);
+    const bucket = buckets.get(key) ?? { r: 0, g: 0, b: 0, n: 0 };
+    bucket.r += r;
+    bucket.g += g;
+    bucket.b += b;
+    bucket.n += 1;
+    buckets.set(key, bucket);
+  }
+
+  const ranked = Array.from(buckets.values())
+    .sort((a, b) => b.n - a.n)
+    .map((s) => ({ r: s.r / s.n, g: s.g / s.n, b: s.b / s.n, n: s.n }));
+
+  const picked: Bucket[] = [];
+  for (const swatch of ranked) {
+    if (picked.length === count) break;
+    if (picked.every((p) => distance(p, swatch) >= MIN_SWATCH_DISTANCE)) picked.push(swatch);
+  }
+
+  return picked.map((s) => toHex(s.r, s.g, s.b));
+}

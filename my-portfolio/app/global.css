@@ -184,6 +184,58 @@ body::before {
   }
 }
 
+/* Cover shelf: the cover lifts and glows in its own colour (--glow), a label names the track */
+.shelf-art {
+  transition:
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+    box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.shelf-label {
+  opacity: 0;
+  transform: translateY(4px);
+  transition:
+    opacity 150ms ease,
+    transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.shelf-link:focus-visible .shelf-art {
+  transform: translateY(-4px) scale(1.04);
+  box-shadow: 0 16px 32px -12px var(--glow, transparent);
+}
+
+.shelf-link:focus-visible .shelf-label {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .shelf-link:hover .shelf-art {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow: 0 16px 32px -12px var(--glow, transparent);
+  }
+
+  .shelf-link:hover .shelf-label {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shelf-art,
+  .shelf-label {
+    transition: none;
+  }
+
+  .shelf-label,
+  .shelf-link:hover .shelf-art,
+  .shelf-link:hover .shelf-label,
+  .shelf-link:focus-visible .shelf-art,
+  .shelf-link:focus-visible .shelf-label {
+    transform: none;
+  }
+}
+
 /* Hero typing: text is in the DOM from first paint; clip-path reveals it, a cursor rides the edge, blinks 3 times and goes */
 .type-once {
   position: relative;

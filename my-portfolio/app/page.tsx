@@ -8,7 +8,7 @@ import {
   ContributionGraph,
   ContributionGraphSkeleton,
 } from "./components/ContributionGraph";
-import { OnRepeat } from "./components/OnRepeat";
+import { OnRepeat } from "./components/on-repeat/OnRepeat";
 import { NowLine } from "./components/NowLine";
 import { RevealOnce } from "./components/RevealOnce";
 

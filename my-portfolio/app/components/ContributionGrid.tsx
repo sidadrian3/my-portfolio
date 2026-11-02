@@ -18,6 +18,8 @@ const GAP = 3;
 const STEP = CELL + GAP;
 const DAYS_IN_WEEK = 7;
 const MONTH_ROW = 14;
+// Room on the right so today's ring and its pulse are not clipped by the viewBox.
+const VIEW_PAD = 6;
 const GRAPH_HEIGHT = MONTH_ROW + DAYS_IN_WEEK * STEP - GAP;
 const LENS_RADIUS = 4;
 const LENS_SCALE = [1.7, 1.3, 1.1, 1, 1];
@@ -104,7 +106,7 @@ export function ContributionGrid({
   onPointerEnterGraph: () => void;
 }) {
   const { weeks } = calendar;
-  const width = weeks.length * STEP - GAP;
+  const width = weeks.length * STEP - GAP + VIEW_PAD;
   const total = formatNumber(calendar.total);
   const monthLabels = weeks.flatMap((week, w) => {
     if (w === 0 || w === weeks.length - 1) return [];

@@ -33,15 +33,15 @@ export function DavaoStatus() {
   return (
     <p className="flex min-h-5 items-center gap-2 text-[13px] tabular-nums text-mute">
       {now && (
-        <>
+        <span className="rise flex items-center gap-2">
           <span
             aria-hidden="true"
-            className={`size-[7px] rounded-full ${awake ? "bg-accent-now" : "bg-faint"}`}
+            className={`dot-pulse size-[7px] rounded-full ${awake ? "bg-accent-now" : "bg-faint"}`}
           />
           <span>
             it&apos;s {time} in davao, {awake ? "i'm probably around." : "i'm asleep, i'll see it in the morning."}
           </span>
-        </>
+        </span>
       )}
     </p>
   );

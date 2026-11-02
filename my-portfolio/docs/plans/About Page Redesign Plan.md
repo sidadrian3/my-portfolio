@@ -84,8 +84,8 @@ git commit -m "feat(content): show bansag as past work and update the now line"
 
 - [ ] **Step 1: Create `PhotoFan`.**
   - Constants: `FAN_SIZE = 4`; `FAN = [{ tilt: -7, lift: 6 }, { tilt: -2, lift: -6 }, { tilt: 3, lift: -4 }, { tilt: 8, lift: 8 }]` (deg, px).
-  - Markup: a `<ul>` (flex, centred, `py-2 pb-5`) of `<li>`s, each with `style={{ "--tilt": "…deg", "--lift": "…px" } as React.CSSProperties}` and a `next/image` `fill` image, `alt={photo.alt}`, `sizes="(min-width: 640px) 190px, 46vw"`, no `priority`. Then a centred `Link href="/photos" className="press text-[15px] text-ink"` "more photos →".
-  - Item size: `w-[46%] -mx-[4%]` below `sm`, `sm:w-[190px] sm:-mx-3.5`, `aspect-square relative overflow-hidden`.
+  - Markup: a `<ul>` (flex, centred, `px-[4%] pb-5 pt-4`) of `<li>`s, each with `style={{ "--tilt": "…deg", "--lift": "…px" } as React.CSSProperties}` and a `next/image` `fill` image, `alt={photo.alt}`, `sizes="(min-width: 640px) 190px, 32vw"`, no `priority`. Then a centred `Link href="/photos" className="press text-[15px] text-ink"` "more photos →".
+  - Item size: `w-[32%] -mx-[4%]` below `sm`, `sm:w-[190px] sm:-mx-3.5`, `aspect-square relative overflow-hidden`.
   - Frame: `border-[6px] border-b-[22px] rounded-[3px] bg-hi border-ink [.light_&]:border-white`, shadow `shadow-[0_10px_30px_rgb(0_0_0/0.6)] [.light_&]:shadow-[0_10px_24px_rgb(20_18_16/0.18)]`.
   - Motion: rest `[transform:rotate(var(--tilt))_translateY(var(--lift))]`; `hover:z-10 hover:[transform:translateY(-14px)_scale(1.06)]`; `transition-transform duration-[260ms] ease-[cubic-bezier(0.23,1,0.32,1)]`; reduced motion `motion-reduce:transition-none motion-reduce:hover:[transform:rotate(var(--tilt))_translateY(var(--lift))]`.
 - [ ] **Step 2: Rewrite `app/about/page.tsx`.**
@@ -101,3 +101,24 @@ git commit -m "feat(content): show bansag as past work and update the now line"
 git add app/components/PhotoFan.tsx app/about/page.tsx app/components/PhotoStack.tsx
 git commit -m "feat(about): split experience and education rails, add centred photo fan"
 ```
+
+## Outcome
+
+**Pipeline outcome:** agentic
+**Lane:** small-change
+**What was built:** `/about` now reads Experience, Education, Off the clock, Snapshots. Experience and Education are separate dated rails, hobbies sit in a four-column row, and the photos are a centred polaroid fan with a CSS-only hover highlight. BANSAG shows as past work (Full-stack developer, 2026, grey dot) and the home "Now" line is the fundamentals-and-AI text. `PhotoStack` and its client JavaScript are gone, and `/about` now ships 174 B of its own JS.
+
+**Decisions made:**
+- Phone photo width is `w-[32%] -mx-[4%]`, not the 46% first drafted: four items at 46% overflow the row and flex would shrink them anyway, so 32% states the real result. Plan text corrected after review.
+- Fan top padding is `pt-4`, not `py-2`: the hovered photo lifted to within a few pixels of the "Snapshots" heading.
+- Photos are not links, buttons or tab stops (owner decision); `/photos` is the only route to them.
+- Photos lazy-load; they are at the bottom of the page.
+- Review declined: moving the fan's hover/shadow recipe into `global.css` and a shared constant for the rail's pixel offsets. Each is used in one place, so extracting would add indirection without reuse.
+
+**Verification:** UI verified: `/about` × 360, 390 and 1440 × dark and light (plus 640, 700 and 768 for the hobbies row): no horizontal scroll, no console errors, hobbies row does not overflow, SAMAHAN row wraps inside its column, photos have no focusable elements. Hover moves only the hovered photo and puts it in front; with reduced motion emulated it does not move. Home shows the new Now line. `npm run typecheck` and `npm run build` pass. Two-axis code review: Standards found no hard violations; Spec found no missing requirements, only the two plan-text deviations above. Escalations: none.
+
+**Notes:**
+- `[end]` education years and the `[event] · [place] · [date]` photo captions are still placeholders. Captions no longer show on `/about`, only on `/photos`.
+- Touch emulation of the fan was not run separately; hover styles are gated by `future.hoverOnlyWhenSupported`, and there is nothing to tap.
+- `npm run build` and `npm run dev` share `.next`. I cleared `.next` while a dev server was already running on port 3000, then stopped dev servers at the end. Restart `npm run dev` to get a clean one.
+- The green "current" dot style is still supported in `TimelineRail` (`current: true`) but no entry uses it.

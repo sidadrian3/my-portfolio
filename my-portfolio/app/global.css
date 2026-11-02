@@ -275,7 +275,31 @@ body::before {
 .contrib-cell {
   transform-box: fill-box;
   transform-origin: center;
-  transition: transform 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  transition:
+    transform 150ms cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 200ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.contrib-cell[data-dim] {
+  opacity: 0.18;
+}
+
+.contrib-cell[data-lit],
+.contrib-cell[data-best] {
+  stroke: rgb(var(--ink));
+  stroke-width: 1;
+}
+
+.contrib-today {
+  fill: none;
+  stroke: rgb(var(--accent-now));
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.contrib-today-ping {
+  display: none;
+  pointer-events: none;
 }
 
 .contrib-cell[data-active] {
@@ -298,6 +322,34 @@ body::before {
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  .contrib-cell[data-best] {
+    transform: scale(1.8);
+    transition-duration: 200ms;
+  }
+
+  .contrib-today-ping {
+    display: block;
+    fill: none;
+    stroke: rgb(var(--accent-now));
+    stroke-width: 1;
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: contrib-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+  }
+
+  @keyframes contrib-ping {
+    from {
+      opacity: 0.8;
+      transform: scale(1);
+    }
+
+    75%,
+    to {
+      opacity: 0;
+      transform: scale(1.9);
+    }
+  }
+
   /* --lx/--ly/--ls are set per cell by ContributionGrid so magnified cells push neighbours apart */
   .contrib-cell[data-lens] {
     transform: translate(calc(var(--lx, 0) * 1px), calc(var(--ly, 0) * 1px)) scale(var(--ls, 1));
@@ -305,8 +357,15 @@ body::before {
 
   /* Hidden only while scripting can reveal them; backwards fill leaves transforms free for the lens */
   @media (scripting: enabled) {
-    .contrib-grid[data-wave="idle"] .contrib-cell {
+    .contrib-grid[data-wave="idle"] .contrib-cell,
+    .contrib-grid[data-wave="idle"] .contrib-month,
+    .contrib-grid[data-wave="idle"] .contrib-today {
       opacity: 0;
+    }
+
+    .contrib-grid[data-wave="play"] .contrib-month,
+    .contrib-grid[data-wave="play"] .contrib-today {
+      animation: contrib-label-in 380ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
     }
 
     .contrib-grid[data-wave="play"] .contrib-cell {
@@ -432,6 +491,12 @@ body::before {
 
     to {
       transform: none;
+    }
+  }
+
+  @keyframes contrib-label-in {
+    from {
+      opacity: 0;
     }
   }
 

@@ -52,7 +52,7 @@ export function ContributionGraphSkeleton() {
         ))}
       </div>
       <div className="pb-1">
-        <div className="h-[74px] w-full bg-hi sm:aspect-[686/91] sm:h-auto" />
+        <div className="h-[82px] w-full bg-hi sm:aspect-[686/105] sm:h-auto" />
       </div>
       <p className="mt-3 text-sm">&nbsp;</p>
     </div>

@@ -1,47 +1,44 @@
 import type { Metadata } from "next";
-import { contacts } from "app/lib/content/contacts";
-import { CopyEmailButton } from "./CopyEmailButton";
+import { socialLinks } from "app/config";
+import { contacts, noteTopics } from "app/lib/content/contacts";
 import { PageHeader } from "app/components/PageHeader";
+import { ComposeCard } from "./ComposeCard";
+import { DavaoStatus } from "./DavaoStatus";
 
 export const metadata: Metadata = {
   title: "Contact",
-  description: "best way to reach me is email.",
+  description: "write me a note. i actually reply.",
 };
 
-const linkClass = "text-[15px] text-ink";
+const socials = contacts.filter((c) => !c.copy);
 
 export default function Contact() {
   return (
     <div className="flex w-full flex-col">
       <PageHeader title="contact">best way to reach me is email. i actually reply.</PageHeader>
-      <ul className="ruled">
-        {contacts.map(({ label, handle, href, copy }) => (
-          <li key={label} className="grid grid-cols-[96px_1fr_auto] items-center">
-            <span className="py-3 text-[15px] text-faint">{label}</span>
-            {copy ? (
-              <>
-                <a href={href} aria-label={`${label}: ${handle}`} className={`${linkClass} min-w-0 break-all py-3`}>
-                  {handle}
-                </a>
-                <CopyEmailButton email={handle} />
-              </>
-            ) : (
+      <DavaoStatus />
+      <div className="mt-6">
+        <ComposeCard email={socialLinks.email} topics={noteTopics} />
+      </div>
+      <div className="mt-7">
+        <h2 className="mb-2.5 text-sm font-semibold text-ink">or find me on</h2>
+        <ul className="flex flex-wrap gap-1.5">
+          {socials.map(({ label, handle, href }) => (
+            <li key={label}>
               <a
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`${label}: ${handle}`}
-                className={`${linkClass} col-span-2 flex items-center justify-between py-3`}
+                className="inline-flex min-h-11 items-center gap-2 rounded-full border border-line px-3.5 text-[13px] transition-colors hover:bg-hi"
               >
-                {handle}
-                <span aria-hidden="true" className="ruled-arrow text-mute">
-                  ↗
-                </span>
+                <span className="text-faint">{label}</span>
+                <span className="text-ink">{handle}</span>
               </a>
-            )}
-          </li>
-        ))}
-      </ul>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }

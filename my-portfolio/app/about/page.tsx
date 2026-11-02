@@ -61,6 +61,9 @@ export default function About() {
   return (
     <div className="flex w-full flex-col">
       <PageHeader title="about">the longer version.</PageHeader>
+      <Section label="Snapshots" stacked className="text-center">
+        <PhotoFan photos={photos} />
+      </Section>
       <Section label="Experience" stacked>
         <TimelineRail entries={experience} />
       </Section>
@@ -76,9 +79,6 @@ export default function About() {
             </div>
           ))}
         </div>
-      </Section>
-      <Section label="Snapshots" stacked className="text-center">
-        <PhotoFan photos={photos} />
       </Section>
     </div>
   );

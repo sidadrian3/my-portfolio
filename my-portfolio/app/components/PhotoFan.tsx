@@ -29,6 +29,7 @@ export function PhotoFan({ photos }: { photos: Photo[] }) {
                 src={photo.src}
                 alt={photo.alt}
                 fill
+                priority
                 sizes="(min-width: 640px) 190px, 32vw"
                 className="object-cover"
               />

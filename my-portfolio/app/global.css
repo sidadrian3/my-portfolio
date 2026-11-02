@@ -283,6 +283,20 @@ body::before {
   stroke-width: 1.2;
 }
 
+/* Now line: each word sits in a mask so it can rise into place; highlights end inked and underlined */
+.now-word {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+}
+
+.now-hl {
+  color: rgb(var(--ink));
+  background: linear-gradient(currentColor, currentColor) 0 100% / 100% 1px no-repeat;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   /* --lx/--ly/--ls are set per cell by ContributionGrid so magnified cells push neighbours apart */
   .contrib-cell[data-lens] {
@@ -319,6 +333,65 @@ body::before {
     [data-reveal="play"] .tl-line {
       animation: tl-draw 520ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
       animation-delay: calc(var(--i) * 90ms);
+    }
+  }
+
+  /* Now line: words rise in a wave, then the highlights ink and underline, then the stamp fades in */
+  @media (scripting: enabled) {
+    [data-reveal="idle"] .now-word > span {
+      transform: translateY(105%);
+    }
+
+    [data-reveal="idle"] .now-stamp {
+      opacity: 0;
+    }
+
+    [data-reveal="idle"] .now-hl {
+      color: rgb(var(--mute));
+      background-size: 0% 1px;
+    }
+
+    [data-reveal="play"] .now-word > span {
+      animation: now-rise 700ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
+      animation-delay: calc(100ms + var(--i) * 25ms);
+    }
+
+    [data-reveal="play"] .now-hl {
+      animation:
+        now-ink 500ms ease-out var(--d) backwards,
+        now-underline 800ms cubic-bezier(0.23, 1, 0.32, 1) var(--d) backwards;
+    }
+
+    [data-reveal="play"] .now-stamp {
+      animation: now-fade 400ms ease-out 900ms backwards;
+    }
+  }
+
+  @keyframes now-rise {
+    from {
+      transform: translateY(105%);
+    }
+
+    to {
+      transform: none;
+    }
+  }
+
+  @keyframes now-ink {
+    from {
+      color: rgb(var(--mute));
+    }
+  }
+
+  @keyframes now-underline {
+    from {
+      background-size: 0% 1px;
+    }
+  }
+
+  @keyframes now-fade {
+    from {
+      opacity: 0;
     }
   }
 

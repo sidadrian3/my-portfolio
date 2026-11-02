@@ -312,3 +312,177 @@ body::before {
     }
   }
 }
+
+/* Contact compose card: row focus, send arrow, caret and pill states; motion is added below for no-preference only */
+.row-focus:focus-within {
+  background-color: rgb(var(--ink) / 0.03);
+}
+
+.row-focus:focus-within .row-label {
+  color: rgb(var(--ink));
+}
+
+.fly {
+  position: relative;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  overflow: hidden;
+}
+
+.fly > svg {
+  position: absolute;
+  inset: 0;
+}
+
+.fly-in {
+  transform: translate(-130%, 130%);
+}
+
+.caret {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  vertical-align: -0.15em;
+  background: rgb(var(--ink));
+}
+
+.lift-arrow {
+  opacity: 0;
+  transform: translateX(-4px);
+}
+
+.lift:focus-visible .lift-arrow {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lift:hover .lift-arrow {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .caret,
+  .fly-in {
+    display: none;
+  }
+
+  .lift-arrow {
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .rise {
+    animation: rise 560ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  }
+
+  .peer:checked + .chip-pop {
+    animation: chip-pop 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .caret {
+    animation: cursor-blink 900ms steps(1) infinite;
+  }
+
+  .dot-pulse {
+    animation: dot-pulse 2.4s ease-in-out infinite;
+  }
+
+  .row-focus {
+    transition: background-color 200ms ease;
+  }
+
+  .row-label {
+    transition: color 200ms ease;
+  }
+
+  .send {
+    transition:
+      transform 160ms ease-out,
+      box-shadow 260ms ease;
+  }
+
+  .fly > svg {
+    transition: transform 360ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  .send:focus-visible .fly-out {
+    transform: translate(130%, -130%);
+  }
+
+  .send:focus-visible .fly-in {
+    transform: none;
+  }
+
+  .lift {
+    transition:
+      transform 240ms cubic-bezier(0.23, 1, 0.32, 1),
+      background-color 180ms ease;
+  }
+
+  .lift:focus-visible {
+    transform: translateY(-2px);
+  }
+
+  .lift-arrow {
+    transition:
+      opacity 200ms cubic-bezier(0.23, 1, 0.32, 1),
+      transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .send:hover {
+      box-shadow: 0 0 0 6px rgb(var(--ink) / 0.08);
+    }
+
+    .send:hover .fly-out {
+      transform: translate(130%, -130%);
+    }
+
+    .send:hover .fly-in {
+      transform: none;
+    }
+
+    .lift:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes chip-pop {
+    from {
+      transform: scale(0.92);
+    }
+
+    to {
+      transform: scale(1);
+    }
+  }
+
+  @keyframes dot-pulse {
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.35;
+    }
+  }
+}

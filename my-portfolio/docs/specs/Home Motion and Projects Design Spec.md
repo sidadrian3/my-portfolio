@@ -126,7 +126,7 @@ Row layout (unchanged grammar, new pieces): `index · title + summary · arrow �
 - **Month labels**: short lower-case month names (`nov … oct`) above the columns where a month starts, 11px `faint`, skipping the first and last column so labels never clip.
 - Existing behaviour stays: wave-in, hover lens, tooltip, arrow-key navigation, horizontal scroll on phones, total line with `github ↗`. The lens and the best-day scale never apply at once (stat highlight clears when the pointer enters the graph).
 - **Computing the numbers** (server, pure function over the calendar): flatten the weeks to days; total = calendar total; current streak counts back from today, or from yesterday when today is still 0; longest = longest run of days with count > 0; best = highest single-day count (earliest wins ties).
-- Reduced motion: no count-up (final numbers), stats fade in instead of rising, no ping, no scale on best day (outline only); dimming still works.
+- Reduced motion: static final state from first paint, as everywhere else on the site: final numbers (no count-up), no stat rise, no ping, no scale on best day (outline only); dimming still works. Escape anywhere in the Shipping panel clears the pin and the preview.
 - No calendar (no token / API down): the existing fallback line, no stats.
 
 ## Files touched (expected)

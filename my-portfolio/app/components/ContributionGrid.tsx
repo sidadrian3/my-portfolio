@@ -291,8 +291,6 @@ export function ContributionGrid({
                 className="contrib-month"
                 x={w * STEP}
                 y={10}
-                fontSize={11}
-                fill="rgb(var(--faint))"
                 style={{ animationDelay: `${w * WAVE_STEP_MS}ms` }}
               >
                 {name}

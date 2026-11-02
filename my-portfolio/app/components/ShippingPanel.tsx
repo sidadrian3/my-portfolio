@@ -40,7 +40,12 @@ export function ShippingPanel({ calendar, summary }: ShippingPanelProps) {
   };
 
   return (
-    <div ref={wrapper}>
+    <div
+      ref={wrapper}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") clearHighlight();
+      }}
+    >
       <ShippingStats
         summary={summary}
         phase={phase}

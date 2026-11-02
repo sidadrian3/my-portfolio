@@ -290,6 +290,11 @@ body::before {
   stroke-width: 1;
 }
 
+.contrib-month {
+  font-size: 11px;
+  fill: rgb(var(--faint));
+}
+
 .contrib-today {
   fill: none;
   stroke: rgb(var(--accent-now));
@@ -361,6 +366,10 @@ body::before {
     .contrib-grid[data-wave="idle"] .contrib-month,
     .contrib-grid[data-wave="idle"] .contrib-today {
       opacity: 0;
+    }
+
+    .contrib-grid[data-wave="idle"] .contrib-today-ping {
+      display: none;
     }
 
     .contrib-grid[data-wave="play"] .contrib-month,
@@ -435,12 +444,12 @@ body::before {
 
     [data-reveal="play"] .now-hl {
       animation:
-        now-ink 500ms ease-out var(--d) backwards,
+        now-ink 500ms cubic-bezier(0.23, 1, 0.32, 1) var(--d) backwards,
         now-underline 800ms cubic-bezier(0.23, 1, 0.32, 1) var(--d) backwards;
     }
 
     [data-reveal="play"] .now-stamp {
-      animation: now-fade 400ms ease-out 900ms backwards;
+      animation: now-fade 400ms cubic-bezier(0.23, 1, 0.32, 1) 900ms backwards;
     }
   }
 
@@ -831,7 +840,7 @@ body::before {
     }
 
     [data-reveal="play"] :is(.pr-idx, .pr-meta) {
-      animation: now-fade 500ms ease-out backwards;
+      animation: now-fade 500ms cubic-bezier(0.23, 1, 0.32, 1) backwards;
       animation-delay: calc(var(--i) * 110ms + 350ms);
     }
   }
@@ -857,11 +866,13 @@ body::before {
   .pr-row-button[aria-expanded="true"]::before,
   .pr-row-button:focus-visible::before {
     opacity: 1;
+    transition-duration: 150ms;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .pr-row-button:hover::before {
       opacity: 1;
+      transition-duration: 150ms;
     }
   }
 }

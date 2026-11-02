@@ -59,10 +59,9 @@ type StatButtonProps = {
   pressed: boolean;
   onPreview: (key: StatKey | null) => void;
   onToggle: (key: StatKey) => void;
-  onEscape: () => void;
 };
 
-function StatButton({ stat, index, phase, active, pressed, onPreview, onToggle, onEscape }: StatButtonProps) {
+function StatButton({ stat, index, phase, active, pressed, onPreview, onToggle }: StatButtonProps) {
   const shown = useCountUp(stat.value, phase === "play");
   const dimmed = active !== null && active !== stat.key;
 
@@ -83,9 +82,6 @@ function StatButton({ stat, index, phase, active, pressed, onPreview, onToggle, 
       }}
       onBlur={() => onPreview(null)}
       onClick={() => onToggle(stat.key)}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") onEscape();
-      }}
     >
       <span className="block text-[28px] font-[650] leading-tight tracking-[-0.03em] tabular-nums text-ink">
         {formatNumber(shown)}
@@ -100,12 +96,12 @@ type ShippingStatsProps = {
   summary: ContributionSummary;
   phase: RevealPhase;
   active: StatKey | null;
-  pinned?: StatKey | null;
+  pinned: StatKey | null;
   onPreview: (key: StatKey | null) => void;
   onToggle: (key: StatKey) => void;
 };
 
-export function ShippingStats({ summary, phase, active, pinned = null, onPreview, onToggle }: ShippingStatsProps) {
+export function ShippingStats({ summary, phase, active, pinned, onPreview, onToggle }: ShippingStatsProps) {
   return (
     <div data-reveal={phase} className="mb-6 grid grid-cols-2 gap-5 sm:grid-cols-4">
       {buildStats(summary).map((stat, index) => (
@@ -118,10 +114,6 @@ export function ShippingStats({ summary, phase, active, pinned = null, onPreview
           pressed={pinned === stat.key}
           onPreview={onPreview}
           onToggle={onToggle}
-          onEscape={() => {
-            if (pinned) onToggle(pinned);
-            onPreview(null);
-          }}
         />
       ))}
     </div>

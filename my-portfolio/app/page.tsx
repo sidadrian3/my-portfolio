@@ -23,7 +23,7 @@ export default function Page() {
         </RevealOnce>
       </Section>
 
-      <Section label="Projects" id="projects">
+      <Section label="Projects" id="projects" className="[animation:none]">
         <ProjectList projects={projects} />
       </Section>
 

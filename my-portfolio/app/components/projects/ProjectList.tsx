@@ -2,8 +2,10 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import type { Project } from "app/lib/content/projects";
+import { useRevealOnce } from "../useRevealOnce";
 import { ProjectPeek } from "./ProjectPeek";
 import { ProjectPoster } from "./ProjectPoster";
+import { ProjectRow } from "./ProjectRow";
 
 const FINE_POINTER = "(hover: hover) and (pointer: fine)";
 
@@ -26,6 +28,8 @@ export function ProjectList({ projects }: { projects: Project[] }) {
   const finePointer = useFinePointer();
   const [openSlug, setOpenSlug] = useState<string | null>(null);
   const [hoverSlug, setHoverSlug] = useState<string | null>(null);
+  const listRef = useRef<HTMLUListElement>(null);
+  const phase = useRevealOnce(listRef);
   const buttons = useRef(new Map<string, HTMLButtonElement>());
 
   const peekProject =
@@ -44,48 +48,45 @@ export function ProjectList({ projects }: { projects: Project[] }) {
   return (
     <>
       <ul
+        ref={listRef}
+        data-reveal={phase}
         className="ruled"
         onKeyDown={onKeyDown}
         onPointerLeave={() => setHoverSlug(null)}
       >
-        {projects.map((project) => {
+        {projects.map((project, index) => {
           const isOpen = openSlug === project.slug;
           const buttonId = `${baseId}-${project.slug}-button`;
           const drawerId = `${baseId}-${project.slug}-drawer`;
 
           return (
-            <li key={project.slug} data-slug={project.slug}>
-              <button
-                id={buttonId}
-                type="button"
-                data-peek-row
-                aria-expanded={isOpen}
-                aria-controls={drawerId}
-                className="press flex w-full items-baseline gap-4 py-3.5 text-left"
-                ref={(node) => {
+            <li
+              key={project.slug}
+              data-slug={project.slug}
+              className="pr-row"
+              style={
+                {
+                  "--i": index,
+                  "--accent-dark": project.accent.dark,
+                  "--accent-light": project.accent.light,
+                } as React.CSSProperties
+              }
+            >
+              <ProjectRow
+                project={project}
+                index={index}
+                isOpen={isOpen}
+                buttonId={buttonId}
+                drawerId={drawerId}
+                buttonRef={(node) => {
                   if (node) buttons.current.set(project.slug, node);
                   else buttons.current.delete(project.slug);
                 }}
-                onClick={() => setOpenSlug(isOpen ? null : project.slug)}
-                onPointerEnter={(event) => {
-                  if (event.pointerType !== "touch") setHoverSlug(project.slug);
+                onToggle={() => setOpenSlug(isOpen ? null : project.slug)}
+                onHover={(pointerType) => {
+                  if (pointerType !== "touch") setHoverSlug(project.slug);
                 }}
-              >
-                <span className="min-w-0 flex-1">
-                  <span className="block text-[15px] font-medium text-ink">
-                    {project.title}
-                  </span>
-                  <span className="mt-0.5 block text-[15px] text-mute">
-                    {project.summary}
-                  </span>
-                </span>
-                <span className="ruled-arrow text-faint" aria-hidden="true">
-                  {isOpen ? "↑" : "↓"}
-                </span>
-                <span className="text-[13px] tabular-nums text-faint">
-                  {project.year}
-                </span>
-              </button>
+              />
 
               <div
                 id={drawerId}

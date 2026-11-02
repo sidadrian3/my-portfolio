@@ -27,7 +27,7 @@ export default function Page() {
         <ProjectList projects={projects} />
       </Section>
 
-      <Section label="Shipping" stacked>
+      <Section label="Shipping" stacked className="[animation:none]">
         <Suspense fallback={<ContributionGraphSkeleton />}>
           <ContributionGraph login="sidadrian3" />
         </Suspense>

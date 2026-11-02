@@ -4,6 +4,7 @@ import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react
 import type { ContributionCalendar } from "app/lib/github";
 import { formatNumber } from "app/lib/format";
 import { clamp } from "app/lib/math";
+import type { RevealPhase } from "./useRevealOnce";
 
 const CELL = 10;
 const GAP = 3;
@@ -40,7 +41,6 @@ const dateFormat = new Intl.DateTimeFormat("en-US", {
 });
 
 type Cell = { w: number; d: number };
-type WavePhase = "idle" | "play" | "done";
 type Tip = { x: number; y: number; count: string; date: string };
 
 const cellKey = (w: number, d: number) => `${w}:${d}`;
@@ -53,7 +53,13 @@ function describeDay(count: number, date: string) {
   };
 }
 
-export function ContributionGrid({ calendar }: { calendar: ContributionCalendar }) {
+export function ContributionGrid({
+  calendar,
+  wave,
+}: {
+  calendar: ContributionCalendar;
+  wave: RevealPhase;
+}) {
   const { weeks } = calendar;
   const width = weeks.length * STEP - GAP;
   const total = formatNumber(calendar.total);
@@ -64,30 +70,8 @@ export function ContributionGrid({ calendar }: { calendar: ContributionCalendar 
   const lensed = useRef<SVGRectElement[]>([]);
   const fromKeyboard = useRef(false);
 
-  const [wave, setWave] = useState<WavePhase>("idle");
   const [active, setActive] = useState<Cell | null>(null);
   const [tip, setTip] = useState<Tip | null>(null);
-
-  // Play the wave once, the first time the graph is mostly on screen.
-  useEffect(() => {
-    const element = frame.current;
-    if (!element) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce || !("IntersectionObserver" in window)) {
-      setWave("done");
-      return;
-    }
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setWave("play");
-        observer.disconnect();
-      },
-      { threshold: 0.3 },
-    );
-    observer.observe(element);
-    return () => observer.disconnect();
-  }, []);
 
   // Touch has no hover, so a tap elsewhere is what dismisses the tooltip.
   useEffect(() => {

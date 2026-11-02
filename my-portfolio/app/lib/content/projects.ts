@@ -1,61 +1,68 @@
 export type ProjectLink = { label: string; url: string };
 
+export type ProjectStatus = "live" | "in progress";
+
 export type Project = {
   slug: string;
   title: string;
   year: number;
   kind: "web" | "mobile";
+  status: ProjectStatus;
   summary: string;
   description: string;
   stack: string[];
   links?: ProjectLink[];
   image?: string;
-  tint?: string;
-  nda?: boolean;
+  tint: string;
+  accent: { dark: string; light: string };
 };
 
 export const projects: Project[] = [
   {
-    slug: "adto",
-    title: "ADTO",
-    year: 2025,
+    slug: "finance-app",
+    title: "Finance App",
+    year: 2026,
     kind: "web",
-    summary: "every Ateneo event in one place. back-end, admin team.",
+    status: "live",
+    summary:
+      "a household budget that shows what's safe to spend after every bill and goal.",
     description:
-      "A centralized platform for discovering and joining Ateneo de Davao University events, built under SAMAHAN Systems Development. I worked on the Admin team's back-end.",
-    stack: ["React", "NestJS", "PostgreSQL"],
+      "A household finance app built around one loop: plan the month, see what's safe to spend after every expense and savings commitment, and track plan against actual as the month goes. Households have owners and members, and it installs as a PWA.",
+    stack: ["Next.js", "Supabase", "Drizzle", "TanStack Query"],
     links: [
-      { label: "Website", url: "https://samahan.addu.edu.ph/adto/home" },
-      {
-        label: "Facebook",
-        url: "https://www.facebook.com/SAMAHANSysDev/posts/pfbid0jgTfXinNpboBdi5GRC2oGFjcGzEur75wXVnfCoZHpVYxrGTai7n1HZ49KKnvFM7vl",
-      },
+      { label: "Live", url: "https://finance-app-wluh-eight.vercel.app" },
     ],
-    tint: "#1d3b6e",
+    tint: "#2b4f6e",
+    accent: { dark: "#8fae86", light: "#123351" },
   },
   {
-    slug: "lylas",
-    title: "Lyla's Food Ordering & Inventory",
-    year: 2024,
-    kind: "mobile",
-    summary: "orders and stock for a real bakery, built for SAD II.",
+    slug: "fitlevelup",
+    title: "FitLevelUp",
+    year: 2026,
+    kind: "web",
+    status: "live",
+    summary: "workouts and runs, played like an RPG. xp, quests, streaks.",
     description:
-      "A food ordering and inventory management app for Lyla's Cakes, Pastries and Breads, built for System Analysis and Design II.",
-    stack: ["React Native", "Supabase", "PostgreSQL"],
+      "A gamified fitness tracker. Log gym sessions and runs, earn XP, level up, clear daily and weekly quests, unlock achievements and keep a daily streak alive.",
+    stack: ["Next.js", "MongoDB", "Better Auth", "TanStack Query"],
     links: [
-      { label: "GitHub", url: "https://github.com/JamesManon-og/FoodOrdering" },
+      { label: "Live", url: "https://fit-level-up-black.vercel.app" },
+      { label: "GitHub", url: "https://github.com/sidadrian3/fit_level_up" },
     ],
-    tint: "#5a3a1a",
+    tint: "#5d7400",
+    accent: { dark: "#d1ff1a", light: "#5b6e00" },
   },
   {
-    slug: "pms",
-    title: "Project Management System",
-    year: 2024,
+    slug: "apartment-system",
+    title: "Apartment System",
+    year: 2026,
     kind: "web",
-    summary: "for an enterprise client. under NDA, so no screenshots, sorry.",
+    status: "in progress",
+    summary: "rent and metered water billing for a small rental property.",
     description:
-      "A project management system for an enterprise client. I worked mostly on the back-end.",
-    stack: ["Next.js", "Nest.js"],
-    nda: true,
+      "A management system for a small rental property: billing cycles for rent and metered water, payments made outside the app and confirmed by staff, and email reminders, with admin, staff and tenant logins. Still in progress, so the code stays private.",
+    stack: ["Next.js", "NestJS", "Supabase", "Resend"],
+    tint: "#1e3a8a",
+    accent: { dark: "#8fa4ec", light: "#1e3a8a" },
   },
 ];

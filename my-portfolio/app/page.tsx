@@ -16,7 +16,17 @@ export default function Page() {
       <Hero />
 
       <Section label="Now">
-        <p className="text-[15px] text-mute">{metaData.now}</p>
+        <p className="text-[15px] text-mute">
+          {metaData.now.map((piece, i) =>
+            typeof piece === "string" ? (
+              piece
+            ) : (
+              <span key={i} className="text-ink">
+                {piece.highlight}
+              </span>
+            ),
+          )}
+        </p>
       </Section>
 
       <Section label="Projects" id="projects">

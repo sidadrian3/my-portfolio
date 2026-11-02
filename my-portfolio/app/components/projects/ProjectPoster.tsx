@@ -1,12 +1,8 @@
 import Image from "next/image";
 import type { Project } from "app/lib/content/projects";
 
-const NDA_STRIPES =
-  "repeating-linear-gradient(135deg, #161616 0 8px, #101010 8px 16px)";
-
 function posterBackground(project: Project) {
-  if (project.nda) return NDA_STRIPES;
-  return `linear-gradient(145deg, ${project.tint ?? "#161616"}, #0d0d0d)`;
+  return `linear-gradient(145deg, ${project.tint}, #0d0d0d)`;
 }
 
 function PosterBody({ project }: { project: Project }) {

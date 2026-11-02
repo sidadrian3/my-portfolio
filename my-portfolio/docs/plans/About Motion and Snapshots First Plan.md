@@ -107,3 +107,30 @@ git commit -m "feat(about): put the snapshots fan first"
 git add app/components/TimelineReveal.tsx app/about/page.tsx app/global.css
 git commit -m "feat(about): stagger the timelines in and highlight rows on hover"
 ```
+
+## Outcome
+
+**Pipeline outcome:** agentic
+**Lane:** small-change
+**What was built:** `/about` now reads Snapshots, Experience, Education, Off the clock. Each timeline plays a staggered entrance once, when it scrolls into view: rows rise 90ms apart, dots pop in just before their row, and the rail line draws downward. Hovering a row fills and scales the dot, brightens the year and text, and slides the text 4px right. Photos in the fan now preload.
+
+**Decisions made:**
+- Each timeline triggers on its own, so Education does not play off-screen: the canvas's shared 270ms offset assumed both were visible.
+- The four fan photos use `priority`: they are the first thing on the page.
+- The hidden state sits inside `no-preference` and `scripting: enabled`: reduced-motion and no-JS visitors see static rows from first paint.
+- Hover is Tailwind `group-hover`; only the entrance needs `global.css`, because it keys off `data-reveal`.
+- Review declined:
+  - A shared observer hook with `ContributionGrid`: it would mean editing an unrelated working component for two uses.
+  - A `Section` prop in place of `[animation:none]`.
+  - A `TimelineRow` extraction.
+  - An easing token in `tailwind.config.js`.
+  
+  Each is used once or twice.
+- Review claimed reduced-motion users see a hidden flash: not true, the idle-hide rule is inside the `no-preference` block (verified: opacity 1 and `done` right after load).
+
+**Verification:** UI verified: `/about` × 360, 390, 1440 × dark and light: no horizontal scroll, no console errors, order is Snapshots, Experience, Education, Off the clock; only the two timeline sections have no scroll reveal; entrance samples show staggered opacity; hover after the entrance scales the dot to 1.3, slides the text 4px and leaves siblings unchanged; reduced motion hovers with colour only, no movement; no-JS shows all rows. `npm run typecheck` and `npm run build` pass. Two-axis review: Standards no hard violations, Spec no missing requirements · Escalations: none.
+
+**Notes:**
+- `[end]` education years and photo captions are still placeholders.
+- Under reduced motion the dot's hover colour change is instant, not a fade (`motion-reduce:transition-none`).
+- I ran `npm run build` while the owner's dev server was on port 3000, which broke its cache. I restarted the server (`npm run dev` is running on port 3000).

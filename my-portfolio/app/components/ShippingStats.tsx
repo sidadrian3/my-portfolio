@@ -77,7 +77,10 @@ function StatButton({ stat, index, phase, active, pressed, onPreview, onToggle, 
       }`}
       onPointerEnter={() => onPreview(stat.key)}
       onPointerLeave={() => onPreview(null)}
-      onFocus={() => onPreview(stat.key)}
+      onFocus={(event) => {
+        // A tap or click also focuses the button; only keyboard focus should preview.
+        if (event.currentTarget.matches(":focus-visible")) onPreview(stat.key);
+      }}
       onBlur={() => onPreview(null)}
       onClick={() => onToggle(stat.key)}
       onKeyDown={(event) => {
@@ -115,7 +118,10 @@ export function ShippingStats({ summary, phase, active, pinned = null, onPreview
           pressed={pinned === stat.key}
           onPreview={onPreview}
           onToggle={onToggle}
-          onEscape={() => pinned && onToggle(pinned)}
+          onEscape={() => {
+            if (pinned) onToggle(pinned);
+            onPreview(null);
+          }}
         />
       ))}
     </div>
